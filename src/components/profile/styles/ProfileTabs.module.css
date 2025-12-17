@@ -1,0 +1,8 @@
+.main_section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    border-radius: 8px;
+    background: #F9F9F9;
+}

@@ -1,0 +1,19 @@
+import instance from "../api/instance.ts";
+
+export interface LoginDto {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+}
+
+export interface LoginResultDto {
+    accessToken: string;
+    refreshToken: string;
+    loginSucceeded: boolean;
+}
+
+export const AuthService = {
+    login: (params: LoginDto) => instance.post<LoginResultDto>("/Auth/login", params),
+    logout: () => instance.post("/Auth/logout"),
+    revoke: () => instance.post("/Auth/revoke_all")
+}
