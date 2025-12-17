@@ -12,6 +12,8 @@ import { Pagination } from "@mui/material";
 import {UserCardList} from "../../components/admin/UserCardList.tsx";
 import {UserCard} from "../../components/admin/UserCard.tsx";
 import SvgSearch from "../../assets/icons/Search.tsx";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING } from "../../constants/event-constants/event.constants.ts";
 
 export const AdminUsersPage = () => {
     const { t } = useTranslation('common');
@@ -21,7 +23,7 @@ export const AdminUsersPage = () => {
     const [metadata, setMetadata] = useState<PagedListMetaData | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState(EMPTY_STRING);
     const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'list' | 'cards'>('list');
 
@@ -29,15 +31,15 @@ export const AdminUsersPage = () => {
     const pageSize = 15;
 
     const [alphabetExpanded, setAlphabetExpanded] = useState(false);
-    const cyrillicLetters = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ".split("");
+    const cyrillicLetters = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ".split(EMPTY_STRING);
 
     const fetchUsers = async () => {
         setLoading(true);
 
         // Если есть выбранная буква, сбрасываем другие поля поиска
-        const emailParam = selectedLetter ? "" : searchQuery.includes("@") ? searchQuery : "";
-        const nameParam = selectedLetter ? "" : !searchQuery.includes("@") ? searchQuery : "";
-        const filterLastNameParam = selectedLetter || "";
+        const emailParam = selectedLetter ? EMPTY_STRING : searchQuery.includes("@") ? searchQuery : EMPTY_STRING;
+        const nameParam = selectedLetter ? EMPTY_STRING : !searchQuery.includes("@") ? searchQuery : EMPTY_STRING;
+        const filterLastNameParam = selectedLetter || EMPTY_STRING;
 
         try {
             const response = await request(
@@ -78,7 +80,7 @@ export const AdminUsersPage = () => {
 
     const handleLetterClick = (letter: string) => {
         setSelectedLetter(letter === selectedLetter ? null : letter);
-        setSearchQuery("");
+        setSearchQuery(EMPTY_STRING);
         setCurrentPage(1);
         setAlphabetExpanded(false);
     };
@@ -95,15 +97,15 @@ export const AdminUsersPage = () => {
             <h1 className={styles.title}>{t("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
                     {t("administration.administration")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/users" className={styles.breadcrumb_active_red}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_USERS} className={styles.breadcrumb_active_red}>
                     {t("administration.users")}
                 </Link>
             </div>
@@ -170,14 +172,14 @@ export const AdminUsersPage = () => {
                     <p>{t("administration.no_users")}</p>
                 ) : viewMode === 'list' ? (
                     users.map((user) => (
-                        <Link to={`/admin/users/${user.id}`} key={user.id} className={styles.user_link}>
+                        <Link to={ADMIN_ROUTES.ADMIN_USER(user.id)} key={user.id} className={styles.user_link}>
                             <UserCardList user={user} />
                         </Link>
                     ))
                 ) : (
                     <div className={styles.card_grid}>
                         {users.map((user) => (
-                            <Link to={`/admin/users/${user.id}`} key={user.id} className={styles.user_link}>
+                            <Link to={ADMIN_ROUTES.ADMIN_USER(user.id)} key={user.id} className={styles.user_link}>
                                 <UserCard user={user} />
                             </Link>
                         ))}

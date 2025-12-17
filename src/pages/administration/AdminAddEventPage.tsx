@@ -11,6 +11,8 @@ import ImageUpload from "../../components/admin/ImageUpload.tsx";
 import {DateTimePicker} from "../../components/admin/DateTimePicker.tsx";
 import {useNotification} from "../../context/NotificationContext.tsx";
 import {AddressInput} from "../../components/admin/AddressInput.tsx";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../../constants/event-constants/event.constants.ts";
 
 export const AdminAddEventPage = () => {
     const { t } = useTranslation('common');
@@ -97,7 +99,7 @@ export const AdminAddEventPage = () => {
             return;
         }
 
-        if (format == EventFormat.Offline && (address == "") && (!latitude) && (!longitude)) {
+        if (format == EventFormat.Offline && (address == EMPTY_STRING) && (!latitude) && (!longitude)) {
             notify("warning", t("events.required_address"))
             return;
         }
@@ -112,7 +114,7 @@ export const AdminAddEventPage = () => {
             return;
         }
 
-        if (longitude && (address == "") || latitude && (address == "")) {
+        if (longitude && (address == EMPTY_STRING) || latitude && (address == EMPTY_STRING)) {
             notify("warning", t("events.required_address"))
             return;
         }
@@ -151,7 +153,7 @@ export const AdminAddEventPage = () => {
             {
                 successMessage: t("events.success"),
                 onSuccess: () => {
-                    navigate("/admin/events");
+                    navigate(ADMIN_ROUTES.ADMIN_EVENTS);
                 }
             }
         );
@@ -162,19 +164,19 @@ export const AdminAddEventPage = () => {
             <h1 className={styles.title}>{t("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
                     {t("administration.administration")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/events" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_EVENTS} className={styles.breadcrumb_link}>
                     {t("administration.events")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/events/creating" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_EVENTS_CREATE} className={styles.breadcrumb_active}>
                     {t("events.creating")}
                 </Link>
             </div>
@@ -249,8 +251,8 @@ export const AdminAddEventPage = () => {
                     <label className={styles.label_choose}>{t("events.format")}</label>
                     <select className={styles.item_input_choose} value={format ?? ''}
                             onChange={(e) => setFormat(e.target.value ? EventFormat[e.target.value as keyof typeof EventFormat] : undefined)}>
-                        <option value={EventFormat.Online}>Онлайн</option>
-                        <option value={EventFormat.Offline}>Офлайн</option>
+                        <option value={EventFormat.Online}>{FORMAT_TEXTS.Online}</option>
+                        <option value={EventFormat.Offline}>{FORMAT_TEXTS.Offline}</option>
                     </select>
                 </div>
 
@@ -304,7 +306,7 @@ export const AdminAddEventPage = () => {
 
                 <div className={styles.buttons_container}>
                     <button className={styles.button_primary} type="submit" onClick={handleSubmit}>{t("common.save")}</button>
-                    <button className={styles.button_outlined} onClick={() => navigate('/admin/events')}>{t("common.cancel")}</button>
+                    <button className={styles.button_outlined} onClick={() => navigate(ADMIN_ROUTES.ADMIN_EVENTS)}>{t("common.cancel")}</button>
                 </div>
 
             </div>

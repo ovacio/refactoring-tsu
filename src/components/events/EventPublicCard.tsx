@@ -5,6 +5,8 @@ import {useTranslation} from "react-i18next";
 import defaultAvatar from "../../assets/jpg/default_avatar.jpg";
 import {EventFormat, EventShortDto, EventStatus} from "../../services/event.service.ts";
 import {Link} from "react-router-dom";
+import { PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { FORMAT_TEXTS } from "../../constants/event-constants/event.constants.ts";
 
 interface EventPublicCardProps {
     event: EventShortDto,
@@ -40,7 +42,7 @@ export const EventPublicCard = (props: EventPublicCardProps) => {
             </div>
 
             <div className={styles.section_container}>
-                <Link to={`/events/${props.event.id}`} key={props.event.id} className={styles.event_link}>
+                <Link to={PUBLIC_ROUTES.EVENT(props.event.id)} key={props.event.id} className={styles.event_link}>
                     <p className={styles.title_event}>{props.event.title}</p>
                 </Link>
 
@@ -60,7 +62,7 @@ export const EventPublicCard = (props: EventPublicCardProps) => {
                     <div className={styles.section_name_text}>{t("events.format")}</div>
                     <div
                         className={styles.section_base_text}>{props.event.format == EventFormat.Online ?
-                        "Онлайн" : "Офлайн"}</div>
+                        FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>
                 </div>
             </div>
         </div>

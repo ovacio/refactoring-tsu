@@ -10,6 +10,8 @@ import {Pagination} from "@mui/material";
 import {EventPublicCard} from "../components/events/EventPublicCard.tsx";
 import {useProfile} from "../context/ProfileContext.tsx";
 import {UserType} from "../services/profile.service.ts";
+import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR } from "../constants/event-constants/event.constants.ts";
 
 export const EventsPage = () => {
     const { t } = useTranslation('common');
@@ -154,11 +156,11 @@ export const EventsPage = () => {
             <h1 className={styles.title}>{t("events.events")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/events" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.EVENTS} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/events" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={PUBLIC_ROUTES.EVENTS} className={styles.breadcrumb_active}>
                     {t("administration.events")}
                 </Link>
             </div>

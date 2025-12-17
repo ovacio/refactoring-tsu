@@ -16,6 +16,8 @@ import {parseJwt} from "../../../../api/instance.ts";
 import SvgLogout from "../../../../assets/icons/Logout.tsx";
 import {AuthService} from "../../../../services/auth.service.ts";
 import {useRequest} from "../../../../hooks/useRequest.ts";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../../../constants/routes/routes.ts";
+import { EMPTY_STRING } from "../../../../constants/event-constants/event.constants.ts";
 
 export const Menu = () => {
     const [open, setOpen] = React.useState(true);
@@ -48,13 +50,13 @@ export const Menu = () => {
     }
 
     const menuItems: MenuItem[] = [
-        { path: "/profile", label: t("menu.profile"), icon: MenuProfile },
-        isAdmin && { path: "/admin", label: t("menu.administration"), icon: MenuAdmin },
-        { path: "/certificates", label: t("menu.certificates"), icon: MenuRef },
-        { path: "/usefulservices", label: t("menu.services"), icon: MenuServices },
-        { path: "/events", label: t("menu.events"), icon: MenuEvents },
-    ].filter((item): item is MenuItem => Boolean(item));
-    const pathsWithSubroutes = ["/admin", "/events"];
+        { path: PUBLIC_ROUTES.PROFILE, label: t("menu.profile"), icon: MenuProfile },
+        isAdmin && { path: ADMIN_ROUTES.ADMIN, label: t("menu.administration"), icon: MenuAdmin },
+        { path: PUBLIC_ROUTES.CERTIFICATES, label: t("menu.certificates"), icon: MenuRef },
+        { path: PUBLIC_ROUTES.USEFUL_SERVICES, label: t("menu.services"), icon: MenuServices },
+        { path: PUBLIC_ROUTES.EVENTS, label: t("menu.events"), icon: MenuEvents },
+    ].filter(Boolean) as MenuItem[];
+    const pathsWithSubroutes = [ADMIN_ROUTES.ADMIN, PUBLIC_ROUTES.EVENTS];
 
     const logout = async () => {
         try {
@@ -66,7 +68,7 @@ export const Menu = () => {
             removeAccessToken();
             removeRefreshToken();
 
-            navigate("/login");
+            navigate(PUBLIC_ROUTES.LOGIN);
 
             //window.location.reload()
 
@@ -104,7 +106,7 @@ export const Menu = () => {
                         ? location.pathname.startsWith(path)
                         : location.pathname === path;
                     return (
-                        <li key={path} className={isActive ? styles.activeItem : ""}>
+                        <li key={path} className={isActive ? styles.activeItem : EMPTY_STRING}>
                             <NavLink to={path} className={styles.menuLink} onClick={isMobile ? toggleMenu : undefined}>
                                 <Icon
                                     stroke={isActive ? "#375FFF" : "#000"}

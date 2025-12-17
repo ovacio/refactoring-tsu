@@ -13,6 +13,8 @@ import {formatDate} from "../components/admin/EventCard.tsx";
 import MapView from "../components/admin/MapView.tsx";
 import {useRequest} from "../hooks/useRequest.ts";
 import {RegisterModal} from "../components/events/RegisterModal.tsx";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../constants/event-constants/event.constants.ts";
+import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
 
 export const EventItemPage = () => {
     const { t } = useTranslation('common');
@@ -99,10 +101,10 @@ export const EventItemPage = () => {
             <h1 className={styles.title}>{t("events.events")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/events" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.EVENTS} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <p className={styles.breadcrumb_active}>
                     {event?.title}
                 </p>
@@ -153,7 +155,7 @@ export const EventItemPage = () => {
 
                 <div className={styles.section}>
                     <p>{t("events.desc")}</p>
-                    <div dangerouslySetInnerHTML={{__html: event?.description || ""}}/>
+                    <div dangerouslySetInnerHTML={{__html: event?.description || EMPTY_STRING}}/>
                     <label>
                         <img src={pictureUrl} alt="avatar" className={styles.image_item_event}/>
                     </label>
@@ -184,7 +186,7 @@ export const EventItemPage = () => {
                                                 <div className={styles.section_name_text}>{t("events.format")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.format == EventFormat.Online ?
-                                                    "Онлайн" : "Офлайн"}</div>
+                                                    FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>
                                             </div> : <></>}
 
                                         {event?.link ?
@@ -212,7 +214,7 @@ export const EventItemPage = () => {
                                                 <div className={styles.section_name_text}>{t("events.format")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.format == EventFormat.Online ?
-                                                    "Онлайн" : "Офлайн"}</div>
+                                                    FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>
                                             </div> : <></>}
 
                                         {event?.link ?

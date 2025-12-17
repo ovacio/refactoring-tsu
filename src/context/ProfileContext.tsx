@@ -3,6 +3,7 @@ import { ProfileDto, ProfileService } from "../services/profile.service";
 import {getRefreshToken} from "../auth/cookiesService.ts";
 import {fetchFileById} from "../pages/administration/AdminItemUserPage.tsx";
 import defaultAvatar from "../assets/jpg/default_avatar.jpg";
+import { EMPTY_STRING } from "../constants/event-constants/event.constants.ts";
 
 interface ProfileContextType {
     profile: ProfileDto | null;
@@ -18,7 +19,7 @@ export const useProfile = () => useContext(ProfileContext);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [profile, setProfile] = useState<ProfileDto | null>(null);
-    const [avatarUrl, setAvatarUrl] = useState<string>("");
+    const [avatarUrl, setAvatarUrl] = useState<string>(EMPTY_STRING);
 
     useEffect(() => {
         const hasRefreshToken = getRefreshToken();

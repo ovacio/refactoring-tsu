@@ -1,4 +1,5 @@
 import {ItemButton} from "../components/common/ui/button/ItemButton.tsx";
+import { EMPTY_STRING } from "../constants/event-constants/event.constants.ts";
 import styles from "./styles/ErrorPage.module.css"
 import {useNavigate} from "react-router-dom";
 
@@ -11,7 +12,7 @@ const typeConfig = {
         text: "Page not Found",
         translate: "Страница не найдена",
         description: ["Вероятно такой страницы не существует или вы ошиблись", "при вводе адреса в строку браузера"],
-        info: ""
+        info: EMPTY_STRING
     },
     "500": {
         text: "Internal Server Error",

@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getAccessToken, getRefreshToken, removeAccessToken, removeRefreshToken, setAccessToken, setRefreshToken } from "../auth/cookiesService.ts";
 import {redirectToLogin, redirectToServerError} from "../services/navigationService.ts";
+import { PUBLIC_ROUTES } from '../constants/routes/routes.ts';
 
 const API_URL = 'https://lk-stud.api.kreosoft.space/api';
 
@@ -43,7 +44,7 @@ instance.interceptors.response.use(
                 removeAccessToken();
                 removeRefreshToken();
 
-                const isPublicPage = window.location.pathname.startsWith("/events");
+                const isPublicPage = window.location.pathname.startsWith(PUBLIC_ROUTES.EVENTS);
                 if (!isPublicPage) {
                     redirectToLogin();
                 }
@@ -73,7 +74,7 @@ instance.interceptors.response.use(
                 removeAccessToken();
                 removeRefreshToken();
 
-                const isPublicPage = window.location.pathname.startsWith("/events");
+                const isPublicPage = window.location.pathname.startsWith(PUBLIC_ROUTES.EVENTS);
                 if (!isPublicPage) {
                     redirectToLogin();
                 }

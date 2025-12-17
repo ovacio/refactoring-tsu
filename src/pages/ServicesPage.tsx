@@ -9,6 +9,8 @@ import {Pagination} from "@mui/material";
 import {ServicePublicCard} from "../components/services/ServicePublicCard.tsx";
 import {useProfile} from "../context/ProfileContext.tsx";
 import {UserType} from "../services/profile.service.ts";
+import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR } from "../constants/event-constants/event.constants.ts";
 
 export const ServicesPage = () => {
     const { t } = useTranslation('common');
@@ -107,12 +109,12 @@ export const ServicesPage = () => {
             <h1 className={styles.title}>{t("administration.services")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
 
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/usefulservices" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={PUBLIC_ROUTES.USEFUL_SERVICES} className={styles.breadcrumb_active}>
                     {t("administration.services")}
                 </Link>
             </div>

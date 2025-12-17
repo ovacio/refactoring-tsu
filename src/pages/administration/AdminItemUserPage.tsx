@@ -7,6 +7,8 @@ import {FileService} from "../../services/file.service.ts";
 import {AvatarUpdateDto, UserService} from "../../services/user.service.ts";
 import {AvatarCropModal} from "../../components/profile/AvatarCropModal.tsx";
 import defaultAvatar from "../../assets/jpg/default_avatar.jpg";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR } from "../../constants/event-constants/event.constants.ts";
 
 
 export const AdminItemUserPage = () => {
@@ -76,19 +78,19 @@ export const AdminItemUserPage = () => {
             <h1 className={styles.title}>{t("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
                     {t("administration.administration")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/users" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_USERS} className={styles.breadcrumb_link}>
                     {t("administration.users")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/users" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_USERS} className={styles.breadcrumb_active}>
                     <p>{profile?.firstName} {profile?.lastName} {profile?.patronymic}</p>
                 </Link>
             </div>

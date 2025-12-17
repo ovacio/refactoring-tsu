@@ -2,6 +2,7 @@ import styles from "./Pagination.module.css"
 import {PagedListMetaData} from "../../../../services/user.service.ts";
 import PaginationLeft from "../../../../assets/icons/PaginationLeft.tsx";
 import PaginationRight from "../../../../assets/icons/PaginationRight.tsx";
+import { EMPTY_STRING } from "../../../../constants/event-constants/event.constants.ts";
 
 interface PaginationProps {
     metadata: PagedListMetaData;
@@ -74,7 +75,7 @@ export const Pagination = ({
                             key={page}
                             onClick={() => onPageChange(page as number)}
                             className={`${styles.pageButton} ${
-                                pageNumber === page ? styles.active : ""
+                                pageNumber === page ? styles.active : EMPTY_STRING
                             }`}
                             aria-current={pageNumber === page ? "page" : undefined}
                         >

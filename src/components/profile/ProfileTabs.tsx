@@ -5,6 +5,7 @@ import {EducationBlock} from "./EducationBlock";
 import {EmployeeBlock} from "./EmployeeBlock";
 import {UserType} from "../../services/profile.service.ts";
 import {useTranslation} from "react-i18next";
+import { EMPTY_STRING } from "../../constants/event-constants/event.constants.ts";
 
 interface Props {
     userTypes: UserType[] | null;
@@ -26,7 +27,7 @@ export const ProfileTabs = ({ userTypes }: Props) => {
                 {hasStudent && (
                     <button
                         onClick={() => setActiveTab("education")}
-                        className={activeTab === "education" ? styles.active : ""}
+                        className={activeTab === "education" ? styles.active : EMPTY_STRING}
                     >
                         {t("education.education")}
                     </button>
@@ -34,7 +35,7 @@ export const ProfileTabs = ({ userTypes }: Props) => {
                 {hasEmployee && (
                     <button
                         onClick={() => setActiveTab("work")}
-                        className={activeTab === "work" ? styles.active : ""}
+                        className={activeTab === "work" ? styles.active : EMPTY_STRING}
                     >
                         {t("employee.work")}
                     </button>

@@ -15,6 +15,7 @@ import {useProfile} from "../../context/ProfileContext.tsx";
 import {FileService} from "../../services/file.service.ts";
 import {StudentCertificateTab} from "./StudentCertificateTab.tsx";
 import {EmployeeCertificateTab} from "./EmployeeCertificateTab.tsx";
+import { EMPTY_STRING } from "../../constants/event-constants/event.constants.ts";
 
 interface Props {
     type: UserType[];
@@ -159,13 +160,13 @@ export const CertificateTabs = ({ type, educationEntries = [], employee }: Props
                     ) : (
                         <div className={styles.switch_user_type_tabs}>
                             <button
-                                className={`${styles.tab} ${currentUserType === UserType.Student ? styles.active : ""}`}
+                                className={`${styles.tab} ${currentUserType === UserType.Student ? styles.active : EMPTY_STRING}`}
                                 onClick={() => setCurrentUserType(UserType.Student)}
                             >
                                 {t("certificates.student")}
                             </button>
                             <button
-                                className={`${styles.tab} ${currentUserType === UserType.Employee ? styles.active : ""}`}
+                                className={`${styles.tab} ${currentUserType === UserType.Employee ? styles.active : EMPTY_STRING}`}
                                 onClick={() => setCurrentUserType(UserType.Employee)}
                             >
                                 {t("certificates.employee")}

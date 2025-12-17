@@ -1,6 +1,7 @@
 import instance from "../api/instance.ts";
 import {Gender, ProfileDto} from "./profile.service.ts";
 import {FileResultDto} from "./file.service.ts";
+import { EMPTY_STRING } from "../constants/event-constants/event.constants.ts";
 
 export interface ProfileShortDtoPagedListWithMetadata {
     results: ProfileShortDto[];
@@ -53,9 +54,9 @@ export interface AvatarUpdateDto {
 }
 
 export const UserService = {
-    getUsers: (email: string = "",
-               name: string = "",
-               filterLastName: string = "",
+    getUsers: (email: string = EMPTY_STRING,
+               name: string = EMPTY_STRING,
+               filterLastName: string = EMPTY_STRING,
                page: number = 1,
                pageSize: number = 20) => instance.get<ProfileShortDtoPagedListWithMetadata>('/User/list', {
                    params: { email, name, filterLastName, page, pageSize } } ),

@@ -11,6 +11,8 @@ import {EventCard} from "../../components/admin/EventCard.tsx";
 import {ItemInput} from "../../components/common/ui/input/ItemInput.tsx";
 import SvgFilter from "../../assets/icons/Filter.tsx";
 import { useSearchParams } from "react-router-dom";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR, FORMAT_TEXTS } from "../../constants/event-constants/event.constants.ts";
 
 export const AdminEventsPage = () => {
     const { t } = useTranslation('common');
@@ -112,7 +114,7 @@ export const AdminEventsPage = () => {
     };
 
     const handleEditEvent = (event: EventShortDto) => {
-        navigate(`/admin/events/editing/${event.id}`);
+        navigate(ADMIN_ROUTES.ADMIN_EVENTS_EDIT(event.id));
     };
 
     return (
@@ -120,15 +122,15 @@ export const AdminEventsPage = () => {
             <h1 className={styles.title}>{t("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
                     {t("administration.administration")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/events" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_EVENTS} className={styles.breadcrumb_active}>
                     {t("administration.events")}
                 </Link>
             </div>
@@ -139,7 +141,7 @@ export const AdminEventsPage = () => {
 
             <button
                 className={styles.add_event_button}
-                onClick={() => navigate('/admin/events/creating')}
+                onClick={() => navigate(ADMIN_ROUTES.ADMIN_EVENTS_CREATE)}
             >
                 {t("events.add")} <AddService/>
             </button>
@@ -196,8 +198,8 @@ export const AdminEventsPage = () => {
                             <select className={styles.item_input_choose} value={format}
                                     onChange={(e) => setFormat(e.target.value)}>
                                 <option value={undefined}></option>
-                                <option value={EventFormat.Online}>Онлайн</option>
-                                <option value={EventFormat.Offline}>Офлайн</option>
+                                <option value={EventFormat.Online}>{FORMAT_TEXTS.Online}</option>
+                                <option value={EventFormat.Offline}>{FORMAT_TEXTS.Offline}</option>
                             </select>
                         </div>
 
