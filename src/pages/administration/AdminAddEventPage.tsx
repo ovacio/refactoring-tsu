@@ -20,10 +20,10 @@ export const AdminAddEventPage = () => {
     const navigate = useNavigate();
     const { notify } = useNotification();
 
-    const [name, setName] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
+    const [name, setName] = useState<string>(EMPTY_STRING);
+    const [description, setDescription] = useState<string>(EMPTY_STRING);
     const [register, setRegister] = useState<boolean>(false);
-    const [address, setAddress] = useState<string>('');
+    const [address, setAddress] = useState<string>(EMPTY_STRING);
 
     const [type, setType] = useState<EventType | undefined>(undefined);
     const [format, setFormat] = useState<EventFormat | undefined>(EventFormat.Online);
@@ -32,10 +32,10 @@ export const AdminAddEventPage = () => {
     const [longitude, setLng] = useState<number>();
     const [latitude, setLatitude] = useState<number>();
 
-    const [link, setLink] = useState<string>('');
-    const [notification, setNotification] = useState<string>('');
+    const [link, setLink] = useState<string>(EMPTY_STRING);
+    const [notification, setNotification] = useState<string>(EMPTY_STRING);
     const [isDigest, setIsDigest] = useState<boolean>(false);
-    const [digest, setDigest] = useState<string>('');
+    const [digest, setDigest] = useState<string>(EMPTY_STRING);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [withStartTime, setWithStartTime] = useState(true);
@@ -56,7 +56,7 @@ export const AdminAddEventPage = () => {
             setLng(undefined);
         }
 
-        if (!selected || selected === '') {
+        if (!selected || selected === EMPTY_STRING) {
             setLatitude(undefined);
             setLng(undefined);
         }
@@ -213,7 +213,7 @@ export const AdminAddEventPage = () => {
                 <div className={styles.row_container}>
                     <div className={styles.input_wrapper}>
                         <label className={styles.label_choose}>{t("events.type")}</label>
-                        <select className={styles.item_input_choose} value={type ?? ''}
+                        <select className={styles.item_input_choose} value={type ?? EMPTY_STRING}
                                 onChange={(e) => setType(e.target.value ? EventType[e.target.value as keyof typeof EventType] : undefined)}>
                             <option value={undefined}></option>
                             <option value={EventType.Open}>Открытое</option>
@@ -223,7 +223,7 @@ export const AdminAddEventPage = () => {
 
                     <div className={styles.input_wrapper}>
                         <label className={styles.label_choose}>{t("events.audience")}</label>
-                        <select className={styles.item_input_choose} value={audience ?? ''}
+                        <select className={styles.item_input_choose} value={audience ?? EMPTY_STRING}
                                 onChange={(e) => setAudience(e.target.value ? EventAuditory[e.target.value as keyof typeof EventAuditory] : undefined)}>
                             <option value={undefined}></option>
                             <option value={EventAuditory.All}>Все</option>
@@ -241,7 +241,7 @@ export const AdminAddEventPage = () => {
                 {register ? <div className={styles.input_wrapper_full}>
                     <label className={styles.label_choose}>{t("events.date_end_register")}</label>
                     <input className={styles.item_input_choose}
-                           value={endDateRegister ? endDateRegister.toISOString().slice(0, 10) : ''} type="date"
+                           value={endDateRegister ? endDateRegister.toISOString().slice(0, 10) : EMPTY_STRING} type="date"
                            onChange={(e) => setEndDateRegister(new Date(e.target.value))}>
 
                     </input>
@@ -249,7 +249,7 @@ export const AdminAddEventPage = () => {
 
                 <div className={styles.input_wrapper_full}>
                     <label className={styles.label_choose}>{t("events.format")}</label>
-                    <select className={styles.item_input_choose} value={format ?? ''}
+                    <select className={styles.item_input_choose} value={format ?? EMPTY_STRING}
                             onChange={(e) => setFormat(e.target.value ? EventFormat[e.target.value as keyof typeof EventFormat] : undefined)}>
                         <option value={EventFormat.Online}>{FORMAT_TEXTS.Online}</option>
                         <option value={EventFormat.Offline}>{FORMAT_TEXTS.Offline}</option>

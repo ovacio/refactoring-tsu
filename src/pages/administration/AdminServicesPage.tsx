@@ -15,6 +15,7 @@ import {useRequest} from "../../hooks/useRequest.ts";
 import {AddServiceModal} from "../../components/admin/AddServiceModal.tsx";
 import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
 import { BREADCRUMB_SEPARATOR } from "../../constants/event-constants/event.constants.ts";
+import { ADMIN_USERS_CONSTANTS } from "../../constants/admin-users-constants/admin-users-constants.ts";
 
 const categories = [UsefulServiceCategory.ForAll, UsefulServiceCategory.Students, UsefulServiceCategory.Employees]
 
@@ -26,8 +27,8 @@ export const AdminServicesPage = () => {
     const [metadata, setMetadata] = useState<PagedListMetaData | null>(null);
 
     const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE);
+    const pageSize = ADMIN_USERS_CONSTANTS.PAGE_SIZE;
 
     const [isAddingModalOpen, setIsAddingModalOpen] = useState(false);
 
@@ -148,7 +149,7 @@ export const AdminServicesPage = () => {
 
             <div className={styles.pagination_container}>
                 <Pagination
-                    count={metadata?.pageCount || 1}
+                    count={metadata?.pageCount || ADMIN_USERS_CONSTANTS.DEFAULT_PAGE}
                     page={currentPage}
                     onChange={handlePageChange}
                 />

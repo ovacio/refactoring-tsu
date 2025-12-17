@@ -12,7 +12,8 @@ import {ItemInput} from "../../components/common/ui/input/ItemInput.tsx";
 import SvgFilter from "../../assets/icons/Filter.tsx";
 import { useSearchParams } from "react-router-dom";
 import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
-import { BREADCRUMB_SEPARATOR, FORMAT_TEXTS } from "../../constants/event-constants/event.constants.ts";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../../constants/event-constants/event.constants.ts";
+import { ADMIN_USERS_CONSTANTS } from "../../constants/admin-users-constants/admin-users-constants.ts";
 
 export const AdminEventsPage = () => {
     const { t } = useTranslation('common');
@@ -23,13 +24,13 @@ export const AdminEventsPage = () => {
     const [metadata, setMetadata] = useState<PagedListMetaData | null>(null);
 
     const [loading, setLoading] = useState(false);
-    const pageSize = 15;
+    const pageSize = ADMIN_USERS_CONSTANTS.PAGE_SIZE;
 
     const [isOpen, setIsOpen] = useState(false);
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const getParam = (key: string) => searchParams.get(key) || '';
+    const getParam = (key: string) => searchParams.get(key) || EMPTY_STRING;
 
     const [name, setName] = useState<string>(() => getParam("name"));
     const [status, setStatus] = useState<string>(() => getParam("status"));
@@ -37,7 +38,7 @@ export const AdminEventsPage = () => {
     const [format, setFormat] = useState<string>(() => getParam("format"));
     const [date, setDate] = useState<string>(() => getParam("date"));
     const [currentPage, setCurrentPage] = useState<number>(() =>
-        parseInt(searchParams.get("page") || "1")
+        parseInt(searchParams.get("page") || String(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE))
     );
 
     const fetchEvents = async () => {
@@ -85,7 +86,7 @@ export const AdminEventsPage = () => {
         };
 
         Object.keys(params).forEach(
-            key => (params[key] === '' || params[key] == null) && delete params[key]
+            key => (params[key] === EMPTY_STRING || params[key] == null) && delete params[key]
         );
 
         setSearchParams(params);
@@ -230,7 +231,7 @@ export const AdminEventsPage = () => {
 
             <div className={styles.pagination_container}>
                 <Pagination
-                    count={metadata?.pageCount || 1}
+                    count={metadata?.pageCount || Number(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE)}
                     page={currentPage}
                     onChange={handlePageChange}
                 />

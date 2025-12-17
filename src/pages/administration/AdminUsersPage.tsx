@@ -13,7 +13,8 @@ import {UserCardList} from "../../components/admin/UserCardList.tsx";
 import {UserCard} from "../../components/admin/UserCard.tsx";
 import SvgSearch from "../../assets/icons/Search.tsx";
 import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
-import { BREADCRUMB_SEPARATOR, EMPTY_STRING } from "../../constants/event-constants/event.constants.ts";
+import { BREADCRUMB_SEPARATOR, CYRILLIC_ALPHABET, EMPTY_STRING } from "../../constants/event-constants/event.constants.ts";
+import { ADMIN_USERS_CONSTANTS, ViewMode } from "../../constants/admin-users-constants/admin-users-constants.ts";
 
 export const AdminUsersPage = () => {
     const { t } = useTranslation('common');
@@ -25,13 +26,13 @@ export const AdminUsersPage = () => {
 
     const [searchQuery, setSearchQuery] = useState(EMPTY_STRING);
     const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
-    const [viewMode, setViewMode] = useState<'list' | 'cards'>('list');
+    const [viewMode, setViewMode] = useState<ViewMode>(ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE);
+    const pageSize = ADMIN_USERS_CONSTANTS.PAGE_SIZE;
 
     const [alphabetExpanded, setAlphabetExpanded] = useState(false);
-    const cyrillicLetters = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ".split(EMPTY_STRING);
+    const cyrillicLetters = CYRILLIC_ALPHABET.split(EMPTY_STRING);
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -74,14 +75,14 @@ export const AdminUsersPage = () => {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        setCurrentPage(1);
+        setCurrentPage(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE);
         //fetchUsers();
     };
 
     const handleLetterClick = (letter: string) => {
         setSelectedLetter(letter === selectedLetter ? null : letter);
         setSearchQuery(EMPTY_STRING);
-        setCurrentPage(1);
+        setCurrentPage(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE);
         setAlphabetExpanded(false);
     };
 
@@ -135,7 +136,7 @@ export const AdminUsersPage = () => {
                                 {cyrillicLetters.map((letter) => (
                                     <span
                                         key={letter}
-                                        className={`${styles.alphabet_letter} ${selectedLetter === letter ? styles.active_letter : ''}`}
+                                        className={`${styles.alphabet_letter} ${selectedLetter === letter ? styles.active_letter : EMPTY_STRING}`}
                                         onClick={() => handleLetterClick(letter)}
                                     >
                                         {letter}
@@ -144,7 +145,7 @@ export const AdminUsersPage = () => {
                             </div>
                         ) : (
                             <p className={styles.alphabet_toggle} onClick={toggleAlphabet}>
-                                {selectedLetter ? selectedLetter : 'А - Я'}
+                                {selectedLetter ? selectedLetter : ADMIN_USERS_CONSTANTS.ALPHABET_DEFAULT_LABEL}
                             </p>
                         )}
                     </div>
@@ -153,8 +154,8 @@ export const AdminUsersPage = () => {
 
                 <div className={styles.view_toggle}>
                     <SearchList
-                        onClick={() => setViewMode('list')}
-                        active={viewMode === 'list'}
+                        onClick={() => setViewMode(ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST)}
+                        active={viewMode === ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST}
                         style={{cursor: 'pointer'}}
                     />
                     <SearchCards
@@ -170,7 +171,7 @@ export const AdminUsersPage = () => {
                     <p>{t("common.loading")}</p>
                 ) : users.length === 0 ? (
                     <p>{t("administration.no_users")}</p>
-                ) : viewMode === 'list' ? (
+                ) : viewMode === ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST ? (
                     users.map((user) => (
                         <Link to={ADMIN_ROUTES.ADMIN_USER(user.id)} key={user.id} className={styles.user_link}>
                             <UserCardList user={user} />
@@ -189,7 +190,7 @@ export const AdminUsersPage = () => {
 
             <div className={styles.pagination_container}>
                 <Pagination
-                    count={metadata?.pageCount || 1}
+                    count={metadata?.pageCount || ADMIN_USERS_CONSTANTS.DEFAULT_PAGE}
                     page={currentPage}
                     onChange={handlePageChange}
                 />

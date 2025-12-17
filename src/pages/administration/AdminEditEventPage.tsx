@@ -30,10 +30,10 @@ export const AdminEditEventPage = () => {
 
     const [loading, setLoading] = useState(true);
 
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
+    const [name, setName] = useState(EMPTY_STRING);
+    const [description, setDescription] = useState(EMPTY_STRING);
     const [register, setRegister] = useState(false);
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState(EMPTY_STRING);
 
     const [type, setType] = useState<EventType | undefined>();
     const [format, setFormat] = useState<EventFormat | undefined>();
@@ -42,10 +42,10 @@ export const AdminEditEventPage = () => {
     const [longitude, setLng] = useState<number>();
     const [latitude, setLatitude] = useState<number>();
 
-    const [link, setLink] = useState('');
-    const [notificationText, setNotificationText] = useState('');
+    const [link, setLink] = useState(EMPTY_STRING);
+    const [notificationText, setNotificationText] = useState(EMPTY_STRING);
     const [isDigest, setIsDigest] = useState(false);
-    const [digest, setDigest] = useState('');
+    const [digest, setDigest] = useState(EMPTY_STRING);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [withStartTime, setWithStartTime] = useState(true);
@@ -73,7 +73,7 @@ export const AdminEditEventPage = () => {
             setLng(undefined);
         }
 
-        if (!selected || selected === '') {
+        if (!selected || selected === EMPTY_STRING) {
             setLatitude(undefined);
             setLng(undefined);
         }
@@ -91,21 +91,21 @@ export const AdminEditEventPage = () => {
                 if (data) {
                     setName(data.data.title);
                     setDescription(data.data.description);
-                    setDigest(data.data.digestText ?? '');
+                    setDigest(data.data.digestText ?? EMPTY_STRING);
                     setLogoId(data.data.picture?.id ?? null);
                     setHavePhoto(!!data.data.picture);
                     setWithStartTime(data.data.isTimeFromNeeded);
                     setStartDate(data.data.dateTimeFrom ? new Date(data.data.dateTimeFrom) : null);
                     setWithEndTime(data.data.isTimeToNeeded);
                     setEndDate(data.data.dateTimeTo ? new Date(data.data.dateTimeTo) : null);
-                    setLink(data.data.link ?? '');
-                    setAddress(data.data.addressName ?? '');
+                    setLink(data.data.link ?? EMPTY_STRING);
+                    setAddress(data.data.addressName ?? EMPTY_STRING);
                     setLatitude(data.data.latitude ?? undefined);
                     setLng(data.data.longitude ?? undefined);
                     setRegister(data.data.isRegistrationRequired);
                     setEndDateRegister(data.data.registrationLastDate ? new Date(data.data.registrationLastDate) : null);
                     setIsDigest(data.data.isDigestNeeded);
-                    setNotificationText(data.data.notificationText ?? '');
+                    setNotificationText(data.data.notificationText ?? EMPTY_STRING);
                     setType(data.data.type);
                     setFormat(data.data.format);
                     setAudience(data.data.auditory);
@@ -191,8 +191,8 @@ export const AdminEditEventPage = () => {
             dateTimeFrom: startDate,
             isTimeToNeeded: withEndTime,
             dateTimeTo: endDate,
-            link: format == EventFormat.Online ? link : '',
-            addressName: format == EventFormat.Offline ? address : '',
+            link: format == EventFormat.Online ? link : EMPTY_STRING,
+            addressName: format == EventFormat.Offline ? address : EMPTY_STRING,
             latitude: format == EventFormat.Offline ? latitude ?? null : null,
             longitude: format == EventFormat.Offline ? longitude ?? null : null,
             isRegistrationRequired: register,
@@ -270,7 +270,7 @@ export const AdminEditEventPage = () => {
                 <div className={styles.row_container}>
                     <div className={styles.input_wrapper}>
                         <label className={styles.label_choose}>{t("events.type")}</label>
-                        <select className={styles.item_input_choose} value={type ?? ''}
+                        <select className={styles.item_input_choose} value={type ?? EMPTY_STRING}
                                 onChange={(e) => setType(e.target.value ? EventType[e.target.value as keyof typeof EventType] : undefined)}>
                             <option value={undefined}></option>
                             <option value={EventType.Open}>Открытое</option>
@@ -280,7 +280,7 @@ export const AdminEditEventPage = () => {
 
                     <div className={styles.input_wrapper}>
                         <label className={styles.label_choose}>{t("events.audience")}</label>
-                        <select className={styles.item_input_choose} value={audience ?? ''}
+                        <select className={styles.item_input_choose} value={audience ?? EMPTY_STRING}
                                 onChange={(e) => setAudience(e.target.value ? EventAuditory[e.target.value as keyof typeof EventAuditory] : undefined)}>
                             <option value={undefined}></option>
                             <option value={EventAuditory.All}>Все</option>
@@ -298,7 +298,7 @@ export const AdminEditEventPage = () => {
                 {register ? <div className={styles.input_wrapper_full}>
                     <label className={styles.label_choose}>{t("events.date_end_register")}</label>
                     <input className={styles.item_input_choose}
-                           value={endDateRegister ? endDateRegister.toISOString().slice(0, 10) : ''} type="date"
+                           value={endDateRegister ? endDateRegister.toISOString().slice(0, 10) : EMPTY_STRING} type="date"
                            onChange={(e) => setEndDateRegister(new Date(e.target.value))}>
 
                     </input>
@@ -306,7 +306,7 @@ export const AdminEditEventPage = () => {
 
                 <div className={styles.input_wrapper_full}>
                     <label className={styles.label_choose}>{t("events.format")}</label>
-                    <select className={styles.item_input_choose} value={format ?? ''}
+                    <select className={styles.item_input_choose} value={format ?? EMPTY_STRING}
                             onChange={(e) => setFormat(e.target.value ? EventFormat[e.target.value as keyof typeof EventFormat] : undefined)}>
                         <option value={EventFormat.Online}>{FORMAT_TEXTS.Online}</option>
                         <option value={EventFormat.Offline}>{FORMAT_TEXTS.Offline}</option>

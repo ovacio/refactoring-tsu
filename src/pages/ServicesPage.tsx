@@ -10,7 +10,7 @@ import {ServicePublicCard} from "../components/services/ServicePublicCard.tsx";
 import {useProfile} from "../context/ProfileContext.tsx";
 import {UserType} from "../services/profile.service.ts";
 import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
-import { BREADCRUMB_SEPARATOR } from "../constants/event-constants/event.constants.ts";
+import { BREADCRUMB_SEPARATOR, PAGE_DEFAULT, PAGE_SIZE } from "../constants/event-constants/event.constants.ts";
 
 export const ServicesPage = () => {
     const { t } = useTranslation('common');
@@ -22,8 +22,8 @@ export const ServicesPage = () => {
     const [metadata, setMetadata] = useState<PagedListMetaData | null>(null);
     const [loading, setLoading] = useState(false);
     const [profileLoading, setProfileLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(PAGE_DEFAULT);
+    const pageSize = PAGE_SIZE;
 
     const filterServices = (services: UsefulServiceDto[]) => {
         if (!profile?.userTypes) {
@@ -131,7 +131,7 @@ export const ServicesPage = () => {
 
             <div className={styles.pagination_container} style={{paddingTop: '16px'}}>
                 <Pagination
-                    count={metadata?.pageCount || 1}
+                    count={metadata?.pageCount || PAGE_DEFAULT}
                     page={currentPage}
                     onChange={handlePageChange}
                 />
