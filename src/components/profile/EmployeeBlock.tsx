@@ -9,7 +9,7 @@ import styles from "./styles/EmployeeBlock.module.css";
 import {PostCard} from "./PostCard.tsx";
 
 export const EmployeeBlock=  () => {
-    const {t} = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const [experience, setExperience] = useState<ExperienceDto[]>([]);
     const [posts, setPosts] = useState<EmployeePostDto[]>([]);
 
@@ -23,7 +23,7 @@ export const EmployeeBlock=  () => {
     return (
         <div>
             <div className={styles.item_post}>
-                <p className={styles.bold_text}>{t('employee.experience')}</p>
+                <p className={styles.bold_text}>{i18next('employee.experience')}</p>
                 {experience.map((exp => (
                     <div className={styles.section_container}>
                         <div className={styles.section_item_block}>

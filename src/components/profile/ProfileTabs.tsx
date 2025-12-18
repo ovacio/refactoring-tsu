@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const ProfileTabs = ({ userTypes }: Props) => {
-    const {t} = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const hasStudent = userTypes?.includes(UserType.Student);
     const hasEmployee = userTypes?.includes(UserType.Employee);
 
@@ -29,7 +29,7 @@ export const ProfileTabs = ({ userTypes }: Props) => {
                         onClick={() => setActiveTab("education")}
                         className={activeTab === "education" ? styles.active : EMPTY_STRING}
                     >
-                        {t("education.education")}
+                        {i18next("education.education")}
                     </button>
                 )}
                 {hasEmployee && (
@@ -37,7 +37,7 @@ export const ProfileTabs = ({ userTypes }: Props) => {
                         onClick={() => setActiveTab("work")}
                         className={activeTab === "work" ? styles.active : EMPTY_STRING}
                     >
-                        {t("employee.work")}
+                        {i18next("employee.work")}
                     </button>
                 )}
             </div>

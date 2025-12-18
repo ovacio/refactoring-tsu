@@ -21,7 +21,7 @@ import { EMPTY_STRING } from "../../../../constants/event-constants/event.consta
 
 export const Menu = () => {
     const [open, setOpen] = React.useState(true);
-    const {t} = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const location = useLocation();
     const { avatarUrl } = useProfile();
     const { isMobile, toggleMenu } = useMenu();
@@ -50,18 +50,18 @@ export const Menu = () => {
     }
 
     const menuItems: MenuItem[] = [
-        { path: PUBLIC_ROUTES.PROFILE, label: t("menu.profile"), icon: MenuProfile },
-        isAdmin && { path: ADMIN_ROUTES.ADMIN, label: t("menu.administration"), icon: MenuAdmin },
-        { path: PUBLIC_ROUTES.CERTIFICATES, label: t("menu.certificates"), icon: MenuRef },
-        { path: PUBLIC_ROUTES.USEFUL_SERVICES, label: t("menu.services"), icon: MenuServices },
-        { path: PUBLIC_ROUTES.EVENTS, label: t("menu.events"), icon: MenuEvents },
+        { path: PUBLIC_ROUTES.PROFILE, label: i18next("menu.profile"), icon: MenuProfile },
+        isAdmin && { path: ADMIN_ROUTES.ADMIN, label: i18next("menu.administration"), icon: MenuAdmin },
+        { path: PUBLIC_ROUTES.CERTIFICATES, label: i18next("menu.certificates"), icon: MenuRef },
+        { path: PUBLIC_ROUTES.USEFUL_SERVICES, label: i18next("menu.services"), icon: MenuServices },
+        { path: PUBLIC_ROUTES.EVENTS, label: i18next("menu.events"), icon: MenuEvents },
     ].filter(Boolean) as MenuItem[];
     const pathsWithSubroutes = [ADMIN_ROUTES.ADMIN, PUBLIC_ROUTES.EVENTS];
 
     const logout = async () => {
         try {
             await request(AuthService.logout(), {
-                successMessage: t("common.success_logout")
+                successMessage: i18next("common.success_logout")
             })
             await AuthService.revoke();
 
@@ -94,7 +94,7 @@ export const Menu = () => {
                 {showLogoutButton ? <button className={styles.logout_button}
                         onClick={logout}
                 >
-                    <p className={styles.logout_text}>{t("common.logout")}</p>
+                    <p className={styles.logout_text}>{i18next("common.logout")}</p>
                     <SvgLogout/>
                 </button> : <></> }
             </div>

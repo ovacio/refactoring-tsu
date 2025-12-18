@@ -8,29 +8,29 @@ import {
     EventService,
     EventStatus,
     EventType
-} from "../../services/event.service.ts";
+} from "../../services/event.service.js";
 import defaultAvatar from "../../assets/jpg/default_avatar.jpg";
-import {fetchFileById} from "./AdminItemUserPage.tsx";
+import {fetchFileById} from "./AdminItemUserPage.js";
 import styles from "./styles/AdminEventsPage.module.css";
-import StatusDropdown from "../../components/admin/StatusDropdown.tsx";
-import EditService from "../../assets/icons/EditService.tsx";
-import DeleteService from "../../assets/icons/DeleteService.tsx";
-import {useRequest} from "../../hooks/useRequest.ts";
-import {formatDate} from "../../components/admin/EventCard.tsx";
-import MapView from "../../components/admin/MapView.tsx";
-import {useNotification} from "../../context/NotificationContext.tsx";
-import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
-import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../../constants/event-constants/event.constants.ts";
+import StatusDropdown from "../../components/admin/StatusDropdown.js";
+import EditService from "../../assets/icons/EditService.js";
+import DeleteService from "../../assets/icons/DeleteService.js";
+import {useRequest} from "../../hooks/useRequest.js";
+import {formatDate} from "../../components/admin/EventCard.js";
+import MapView from "../../components/admin/MapView.js";
+import {useNotification} from "../../context/NotificationContext.js";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.js";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../../constants/event-constants/event.constants.js";
 
 
-export const AdminItemEventPage = () => {
-    const { t } = useTranslation('common');
+export const AdminDetailsEventPage = () => {
+    const { t: i18next } = useTranslation('common');
     const { request } = useRequest();
     const { notify } = useNotification();
     const navigate = useNavigate();
     const { eventId } = useParams<{ eventId: string }>();
     const [event, setEvent] = useState<EventDto | null>(null);
-    const [pictureUrl, setPictureUrl] = useState<string | undefined>();
+    const [eventImageUrl, setEventImageUrl] = useState<string | undefined>();
 
     const defaultTab = "inside"
     const [activeTab, setActiveTab] = useState<"inside" | "outside" | null>(defaultTab);
@@ -46,8 +46,8 @@ export const AdminItemEventPage = () => {
             await Promise.all(event.participants.map(async (p) => {
                 if (p.user && p.user?.avatar?.id) {
                     try {
-                        const url = await fetchFileById(p.user.avatar.id);
-                        avatarMap[p.id] = url;
+                        const pictureObjectUrl = await fetchFileById(p.user.avatar.id);
+                        avatarMap[p.id] = pictureObjectUrl;
                     } catch (e) {
                         avatarMap[p.id] = defaultAvatar;
                     }
@@ -90,8 +90,8 @@ export const AdminItemEventPage = () => {
                         dto,
                     ),
                     {
-                        onSuccess: () => notify("success", t("events.success_edit_status")),
-                        errorMessage: t("events.error_edit_status")
+                        onSuccess: () => notify("success", i18next("events.success_edit_status")),
+                        errorMessage: i18next("events.error_edit_status")
                     }
 
                 )
@@ -102,7 +102,7 @@ export const AdminItemEventPage = () => {
         }
     }
     useEffect(() => {
-        const fetchEvent = async () => {
+        const loadEventWithDetails = async () => {
             try {
                 if (!eventId) {
                     console.error("User ID is missing");
@@ -114,42 +114,42 @@ export const AdminItemEventPage = () => {
                 setEvent(data);
 
                 if (!data.picture?.id) {
-                    setPictureUrl(defaultAvatar);
+                    setEventImageUrl(defaultAvatar);
                     return;
                 }
 
-                const url = await fetchFileById(data.picture.id);
-                setPictureUrl(url);
+                const pictureObjectUrl = await fetchFileById(data.picture.id);
+                setEventImageUrl(pictureObjectUrl);
 
                 return () => {
-                    if (url) URL.revokeObjectURL(url);
+                    if (pictureObjectUrl) URL.revokeObjectURL(pictureObjectUrl);
                 };
             } catch (error) {
                 console.error("Ошибка загрузки профиля:", error);
-                setPictureUrl(defaultAvatar);
+                setEventImageUrl(defaultAvatar);
             }
         };
 
-        fetchEvent();
+        loadEventWithDetails();
     }, [eventId]);
 
 
     return(
         <div className={styles.admin_events_page}>
 
-            <h1 className={styles.title}>{t("administration.administration")}</h1>
+            <h1 className={styles.title}>{i18next("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
-                    {t("administration.administration")}
+                    {i18next("administration.administration")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN_EVENTS} className={styles.breadcrumb_active}>
-                    {t("administration.events")}
+                    {i18next("administration.events")}
                 </Link>
             </div>
 
@@ -173,23 +173,23 @@ export const AdminItemEventPage = () => {
                 </div>
 
                 <div className={styles.section}>
-                    <p>{t("events.desc")}</p>
+                    <p>{i18next("events.desc")}</p>
                     <div dangerouslySetInnerHTML={{__html: event?.description || EMPTY_STRING}}/>
                     <label>
-                        <img src={pictureUrl} alt="avatar" className={styles.image_item_event}/>
+                        <img src={eventImageUrl} alt="avatar" className={styles.image_item_event}/>
                     </label>
 
                     {event?.format == EventFormat.Online ?
                         <>
                             <div className={styles.section_row}>
                                 {event?.type ? <div className={styles.section_item_block}>
-                                    <div className={styles.section_name_text}>{t("events.type")}</div>
+                                    <div className={styles.section_name_text}>{i18next("events.type")}</div>
                                     <div
                                         className={styles.section_base_text}>{event.type == EventType.Open ? "Открытое" : event.type == EventType.Close ? "Закрытое" : "Неизвестно"}</div>
                                 </div> : <></>}
 
                                 {event?.auditory ? <div className={styles.section_item_block}>
-                                    <div className={styles.section_name_text}>{t("events.audience")}</div>
+                                    <div className={styles.section_name_text}>{i18next("events.audience")}</div>
                                     <div
                                         className={styles.section_base_text}>{event.auditory == EventAuditory.All ?
                                         "Общий" : event.auditory == EventAuditory.Students ? "Студенты" : "Преподаватели"}</div>
@@ -199,7 +199,7 @@ export const AdminItemEventPage = () => {
                             <div className={styles.section_row}>
                                 {event?.dateTimeTo ?
                                     <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("events.date")}</div>
+                                        <div className={styles.section_name_text}>{i18next("events.date")}</div>
                                         <div
                                             className={styles.section_base_text}>{event.dateTimeTo ? formatDate(event.dateTimeFrom) +
                                             " - " + formatDate(event.dateTimeTo) : formatDate(event.dateTimeFrom)}</div>
@@ -207,7 +207,7 @@ export const AdminItemEventPage = () => {
 
                                 {event?.format ?
                                     <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("events.format")}</div>
+                                        <div className={styles.section_name_text}>{i18next("events.format")}</div>
                                         <div
                                             className={styles.section_base_text}>{event.format == EventFormat.Online ?
                                             FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>
@@ -216,22 +216,22 @@ export const AdminItemEventPage = () => {
 
                             {event?.link ?
                                 <div className={styles.section_item_block}>
-                                    <div className={styles.section_name_text}>{t("events.link")}</div>
+                                    <div className={styles.section_name_text}>{i18next("events.link")}</div>
                                     <div className={styles.section_base_text}>{event.link}</div>
                                 </div>
                                 : <></>}
 
                             {event?.isDigestNeeded ? <div className={styles.section_item_block}>
-                                    <div className={styles.section_name_text}>{t("events.digest_text")}</div>
+                                    <div className={styles.section_name_text}>{i18next("events.digest_text")}</div>
                                     <div dangerouslySetInnerHTML={{__html: event?.digestText || styles.section_base_text}}/>
                                 </div>
                                 : event ? <div className={styles.section_item_block}>
-                                    <div className={styles.section_name_text}>{t("events.digest")}</div>
+                                    <div className={styles.section_name_text}>{i18next("events.digest")}</div>
                                     <div className={styles.section_base_text}>Нет</div>
                                 </div> : <></>}
 
                             {event?.author ? <div className={styles.section_item_block}>
-                                <div className={styles.section_name_text}>{t("events.created_by")}</div>
+                                <div className={styles.section_name_text}>{i18next("events.created_by")}</div>
                                 <div
                                     className={styles.section_base_text}>{event.author.firstName} {event.author.lastName} {event.author.patronymic}</div>
                             </div> : <></>}
@@ -239,13 +239,13 @@ export const AdminItemEventPage = () => {
                             {event?.isRegistrationRequired ?
                                 <div className={styles.section_row}>
                                     <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("events.need_register")}</div>
+                                        <div className={styles.section_name_text}>{i18next("events.need_register")}</div>
                                         <div
                                             className={styles.section_base_text}>{event.isRegistrationRequired ? "Да" : "Нет"}</div>
                                     </div>
 
                                     <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("events.date_end_register")}</div>
+                                        <div className={styles.section_name_text}>{i18next("events.date_end_register")}</div>
                                         <div
                                             className={styles.section_base_text}>{formatDate(event.registrationLastDate)}</div>
                                     </div>
@@ -259,7 +259,7 @@ export const AdminItemEventPage = () => {
                                             onClick={() => setActiveTab("inside")}
                                             className={activeTab === "inside" ? styles.active : EMPTY_STRING}
                                         >
-                                            {t("events.inside_participant")}
+                                            {i18next("events.inside_participant")}
                                         </button>
                                     )}
                                     {(
@@ -267,7 +267,7 @@ export const AdminItemEventPage = () => {
                                             onClick={() => setActiveTab("outside")}
                                             className={activeTab === "outside" ? styles.active : EMPTY_STRING}
                                         >
-                                            {t("events.outside_participant")}
+                                            {i18next("events.outside_participant")}
                                         </button>
                                     )}
                                 </div>
@@ -278,7 +278,7 @@ export const AdminItemEventPage = () => {
                                             {event?.participants
                                                 .filter(p => p.participantType === EventParticipantType.Inner).length === 0 ? (
                                                 <div className={styles.participant_name}>
-                                                    {t("events.no_inner_participants")}
+                                                    {i18next("events.no_inner_participants")}
                                                 </div>
                                             ) : (
                                                 event?.participants
@@ -314,7 +314,7 @@ export const AdminItemEventPage = () => {
                                                 if (externalParticipants.length === 0) {
                                                     return (
                                                         <div className={styles.participant_name}>
-                                                            {t("events.no_external_participants")}
+                                                            {i18next("events.no_external_participants")}
                                                         </div>
                                                     );
                                                 }
@@ -334,7 +334,7 @@ export const AdminItemEventPage = () => {
                                                                         {participant.phone}
                                                                     </div>
                                                                     <div className={styles.section_name_text}>
-                                                                        {t("profile.add_info")}
+                                                                        {i18next("profile.add_info")}
                                                                     </div>
                                                                     <div className={styles.section_base_text}>
                                                                         {participant.additionalInfo}
@@ -342,7 +342,7 @@ export const AdminItemEventPage = () => {
                                                                 </>
                                                             ) : (
                                                                 <div className={styles.participant_name}>
-                                                                    {t("events.no_external_participants")}
+                                                                    {i18next("events.no_external_participants")}
                                                                 </div>
                                                             )}
                                                         </div>
@@ -358,13 +358,13 @@ export const AdminItemEventPage = () => {
                             {event?.isRegistrationRequired ?
                                 <div className={styles.section_row}>
                                     <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("events.need_register")}</div>
+                                        <div className={styles.section_name_text}>{i18next("events.need_register")}</div>
                                         <div
                                             className={styles.section_base_text}>{event.isRegistrationRequired ? "Да" : "Нет"}</div>
                                     </div>
 
                                     <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("events.date_end_register")}</div>
+                                        <div className={styles.section_name_text}>{i18next("events.date_end_register")}</div>
                                         <div
                                             className={styles.section_base_text}>{formatDate(event.registrationLastDate)}</div>
                                     </div>
@@ -376,13 +376,13 @@ export const AdminItemEventPage = () => {
 
                                     <div className={styles.section_row}>
                                         {event?.type ? <div className={styles.section_item_block}>
-                                            <div className={styles.section_name_text}>{t("events.type")}</div>
+                                            <div className={styles.section_name_text}>{i18next("events.type")}</div>
                                             <div
                                                 className={styles.section_base_text}>{event.type == EventType.Open ? "Открытое" : event.type == EventType.Close ? "Закрытое" : "Неизвестно"}</div>
                                         </div> : <></>}
 
                                         {event?.auditory ? <div className={styles.section_item_block}>
-                                            <div className={styles.section_name_text}>{t("events.audience")}</div>
+                                            <div className={styles.section_name_text}>{i18next("events.audience")}</div>
                                             <div
                                                 className={styles.section_base_text}>{event.auditory == EventAuditory.All ?
                                                 "Общий" : event.auditory == EventAuditory.Students ? "Студенты" : "Преподаватели"}</div>
@@ -392,7 +392,7 @@ export const AdminItemEventPage = () => {
                                     <div className={styles.section_row}>
                                         {event?.dateTimeTo ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.date")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.date")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.dateTimeTo ? formatDate(event.dateTimeFrom) +
                                                     " - " + formatDate(event.dateTimeTo) : formatDate(event.dateTimeFrom)}</div>
@@ -400,27 +400,27 @@ export const AdminItemEventPage = () => {
 
                                         {event?.format ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.format")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.format")}</div>
                                                 <div className={styles.section_base_text}>Оффлайн</div>
                                             </div>
                                             : null}
                                     </div>
 
                                     {event?.addressName ? <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("profile.address")}</div>
+                                        <div className={styles.section_name_text}>{i18next("profile.address")}</div>
                                         <div
                                             className={styles.section_base_text}>{event.addressName}</div>
                                     </div> : <></>}
 
                                     <div className={styles.section_row}>
                                         {event?.longitude ? <div className={styles.section_item_block}>
-                                            <div className={styles.section_name_text}>{t("events.longitude")}</div>
+                                            <div className={styles.section_name_text}>{i18next("events.longitude")}</div>
                                             <div
                                                 className={styles.section_base_text}>{event.longitude}</div>
                                         </div> : <></>}
 
                                         {event?.latitude ? <div className={styles.section_item_block}>
-                                            <div className={styles.section_name_text}>{t("events.latitude")}</div>
+                                            <div className={styles.section_name_text}>{i18next("events.latitude")}</div>
                                             <div
                                                 className={styles.section_base_text}>{event.latitude}</div>
                                         </div> : <></>}
@@ -440,23 +440,23 @@ export const AdminItemEventPage = () => {
                             {event?.isDigestNeeded ?
                                 <div className={styles.participant_column}>
                                     <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("events.digest")}</div>
+                                        <div className={styles.section_name_text}>{i18next("events.digest")}</div>
                                         <div className={styles.section_base_text}>Да</div>
                                     </div>
                                     <div className={styles.section_item_block}>
-                                        <div className={styles.section_name_text}>{t("events.digest_text")}</div>
+                                        <div className={styles.section_name_text}>{i18next("events.digest_text")}</div>
                                         <div
                                             dangerouslySetInnerHTML={{__html: event?.digestText || styles.section_base_text}}/>
                                         <div style={{border: `1px solid #EFEFEF`}}></div>
                                     </div>
                                 </div>
                                 : event ? <div className={styles.section_item_block}>
-                                    <div className={styles.section_name_text}>{t("events.digest")}</div>
+                                    <div className={styles.section_name_text}>{i18next("events.digest")}</div>
                                     <div className={styles.section_base_text}>Нет</div>
                                 </div> : <></>}
 
                             {event?.author ? <div className={styles.section_item_block}>
-                                <div className={styles.section_name_text}>{t("events.created_by")}</div>
+                                <div className={styles.section_name_text}>{i18next("events.created_by")}</div>
                                 <div
                                     className={styles.section_base_text}>{event.author.firstName} {event.author.lastName} {event.author.patronymic}</div>
                             </div> : <></>}

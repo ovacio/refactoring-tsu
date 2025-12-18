@@ -20,7 +20,7 @@ import { ADMIN_USERS_CONSTANTS } from "../../constants/admin-users-constants/adm
 const categories = [UsefulServiceCategory.ForAll, UsefulServiceCategory.Students, UsefulServiceCategory.Employees]
 
 export const AdminServicesPage = () => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { request } = useRequest();
 
     const [services, setServices] = useState<UsefulServiceDto[]>([]);
@@ -99,31 +99,31 @@ export const AdminServicesPage = () => {
 
     return (
         <div className={styles.useful_services_page}>
-            <h1 className={styles.title}>{t("administration.administration")}</h1>
+            <h1 className={styles.title}>{i18next("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
-                    {t("administration.administration")}
+                    {i18next("administration.administration")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN_USEFUL_SERVICES} className={styles.breadcrumb_active}>
-                    {t("administration.services")}
+                    {i18next("administration.services")}
                 </Link>
             </div>
 
             <h2 className={`${styles.title_name}`}>
-                {t("administration.services")}
+                {i18next("administration.services")}
             </h2>
 
             <button
                 className={styles.add_service_button}
                 onClick={() => setIsAddingModalOpen(true)}
             >
-                {t("services.add")} <AddService/>
+                {i18next("services.add")} <AddService/>
             </button>
 
             <AddServiceModal
@@ -139,9 +139,9 @@ export const AdminServicesPage = () => {
 
             <div className={styles.users_container}>
                 {loading ? (
-                    <p>{t("common.loading")}</p>
+                    <p>{i18next("common.loading")}</p>
                 ) : services.length === 0 ? (
-                    <p>{t("administration.no_users")}</p>
+                    <p>{i18next("administration.no_users")}</p>
                 ) : services.map((service) => (
                     <ServiceCard key={service.id} service={service} onDelete={handleDeleteService} onEdit={handleEditService}/>
                     ))}

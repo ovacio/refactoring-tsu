@@ -22,11 +22,11 @@ export const getCroppedImg = async (imageSrc: string, pixelCrop: any): Promise<B
     });
 };
 
-const createImage = (url: string): Promise<HTMLImageElement> =>
+const createImage = (pictureObjectUrl: string): Promise<HTMLImageElement> =>
     new Promise((resolve, reject) => {
         const image = new Image();
         image.addEventListener('load', () => resolve(image));
         image.addEventListener('error', (error) => reject(error));
         image.setAttribute('crossOrigin', 'anonymous');
-        image.src = url;
+        image.src = pictureObjectUrl;
     });

@@ -14,7 +14,7 @@ interface Props {
 
 export default function ImageUpload({ onUpload, initialFileName }: Props) {
     const [fileName, setFileName] = useState<string | null>(initialFileName || null);
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
 
     useEffect(() => {if (initialFileName) setFileName(initialFileName)}, [initialFileName]);
 
@@ -57,7 +57,7 @@ export default function ImageUpload({ onUpload, initialFileName }: Props) {
                     />
                     <span className={styles.upload_prompt}>
                         <SvgImageUpload />
-                        {t("services.image")}
+                        {i18next("services.image")}
                     </span>
                 </label>
             ) : (

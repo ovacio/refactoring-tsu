@@ -4,23 +4,24 @@ import {useEffect, useState} from "react";
 import {
     EventDto, EventFormat, EventInnerRegisterDto,
     EventService
-} from "../services/event.service.ts";
-import {fetchFileById} from "./administration/AdminItemUserPage.tsx";
+} from "../services/event.service.js";
+import {fetchFileById} from "./administration/AdminItemUserPage.js";
 import styles from "../pages/administration/styles/AdminEventsPage.module.css"
 import defaultAvatar from "../assets/jpg/default_avatar.jpg";
 
-import {formatDate} from "../components/admin/EventCard.tsx";
-import MapView from "../components/admin/MapView.tsx";
-import {useRequest} from "../hooks/useRequest.ts";
-import {RegisterModal} from "../components/events/RegisterModal.tsx";
-import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../constants/event-constants/event.constants.ts";
-import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
+import {formatDate} from "../components/admin/EventCard.js";
+import MapView from "../components/admin/MapView.js";
+import {useRequest} from "../hooks/useRequest.js";
+import {RegisterModal} from "../components/events/RegisterModal.js";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../constants/event-constants/event.constants.js";
+import { PUBLIC_ROUTES } from "../constants/routes/routes.js";
+import { HTTP_STATUS } from "../constants/http-status/http-status.js";
 
-export const EventItemPage = () => {
-    const { t } = useTranslation('common');
+export const EventDetailsPage = () => {
+    const { t: i18next } = useTranslation('common');
     const { eventId } = useParams<{ eventId: string }>();
     const [event, setEvent] = useState<EventDto | null>(null);
-    const [pictureUrl, setPictureUrl] = useState<string | undefined>();
+    const [eventImageUrl, setEventImageUrl] = useState<string | undefined>();
 
     const [isParticipant, setIsParticipant] = useState(false);
     const [isAuth, setIsAuth] = useState(true);
@@ -28,7 +29,7 @@ export const EventItemPage = () => {
 
     const { request } = useRequest();
 
-    const fetchEvent = async () => {
+    const loadEventWithDetails = async () => {
         try {
             if (!eventId) {
                 console.error("User ID is missing");
@@ -39,35 +40,35 @@ export const EventItemPage = () => {
             setEvent(data);
 
             if (!data.picture?.id) {
-                setPictureUrl(defaultAvatar);
+                setEventImageUrl(defaultAvatar);
                 return;
             }
 
-            const url = await fetchFileById(data.picture.id);
-            setPictureUrl(url);
+            const pictureObjectUrl = await fetchFileById(data.picture.id);
+            setEventImageUrl(pictureObjectUrl);
 
-            await checkParticipation(eventId);
+            await validateUserParticipation(eventId);
 
             return () => {
-                if (url) URL.revokeObjectURL(url);
+                if (pictureObjectUrl) URL.revokeObjectURL(pictureObjectUrl);
             };
         } catch (error) {
             console.error("Ошибка загрузки профиля:", error);
-            setPictureUrl(defaultAvatar);
+            setEventImageUrl(defaultAvatar);
         }
     };
 
     useEffect(() => {
-        fetchEvent();
+        loadEventWithDetails();
     }, [eventId, isParticipant]);
 
-    const checkParticipation = async (eventId: string) => {
+    const validateUserParticipation = async (eventId: string) => {
         try {
             const { data } = await EventService.checkIsUserParticipant(eventId);
             setIsParticipant(data.isParticipating);
             setIsAuth(true)
         } catch (error: any) {
-            if (error.response?.status === 401) {
+            if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
                 setIsAuth(false);
             }
         }
@@ -76,10 +77,10 @@ export const EventItemPage = () => {
     const registerAsInnerParticipant = async (eventId: string) => {
         if (!eventId) return;
 
-        const dto: EventInnerRegisterDto = { eventId };
-        await request(EventService.registerInner(dto), {
-            successMessage: t("events.success_register"),
-            errorMessage: t("events.failed_register"),
+        const eventInnerRegisterId: EventInnerRegisterDto = { eventId };
+        await request(EventService.registerInner(eventInnerRegisterId), {
+            successMessage: i18next("events.success_register"),
+            errorMessage: i18next("events.failed_register"),
             onSuccess: () => setIsParticipant(true),
         });
     };
@@ -87,7 +88,7 @@ export const EventItemPage = () => {
     const handleParticipateClick = async () => {
         if (!eventId) return;
 
-        await checkParticipation(eventId)
+        await validateUserParticipation(eventId)
         if (isAuth) {
             await registerAsInnerParticipant(eventId);
         } else {
@@ -98,11 +99,11 @@ export const EventItemPage = () => {
     return(
         <div className={styles.admin_events_page}>
 
-            <h1 className={styles.title}>{t("events.events")}</h1>
+            <h1 className={styles.title}>{i18next("events.events")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.EVENTS} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <p className={styles.breadcrumb_active}>
@@ -121,7 +122,7 @@ export const EventItemPage = () => {
                                 className={styles.already_participant_button}
                                 disabled
                             >
-                                {t("events.participate")}
+                                {i18next("events.participate")}
                             </button>
                         ) : (
                             <button
@@ -129,7 +130,7 @@ export const EventItemPage = () => {
                                 className={styles.participant_button}
                                 onClick={handleParticipateClick}
                             >
-                                {t("events.will_participate")}
+                                {i18next("events.will_participate")}
                             </button>
                         )
                     )}
@@ -144,7 +145,7 @@ export const EventItemPage = () => {
                         }}
                         onSuccess={() => {
                             setIsRegisterWindowOpen(false);
-                            fetchEvent();
+                            loadEventWithDetails();
                             setIsParticipant(true)
                         }}
                         eventId={event.id}
@@ -154,10 +155,10 @@ export const EventItemPage = () => {
 
 
                 <div className={styles.section}>
-                    <p>{t("events.desc")}</p>
+                    <p>{i18next("events.desc")}</p>
                     <div dangerouslySetInnerHTML={{__html: event?.description || EMPTY_STRING}}/>
                     <label>
-                        <img src={pictureUrl} alt="avatar" className={styles.image_item_event}/>
+                        <img src={eventImageUrl} alt="avatar" className={styles.image_item_event}/>
                     </label>
 
                     {event?.format == EventFormat.Online ? // online register required
@@ -166,14 +167,14 @@ export const EventItemPage = () => {
                                 <>
                                     <div className={styles.section_item_block}>
                                         <div
-                                            className={styles.section_name_text}>{t("events.date_end_register")}</div>
+                                            className={styles.section_name_text}>{i18next("events.date_end_register")}</div>
                                         <div
                                             className={styles.section_base_text}>{formatDate(event.registrationLastDate)}</div>
                                     </div>
 
                                     {event?.dateTimeTo ?
                                         <div className={styles.section_item_block}>
-                                            <div className={styles.section_name_text}>{t("events.date")}</div>
+                                            <div className={styles.section_name_text}>{i18next("events.date")}</div>
                                             <div
                                                 className={styles.section_base_text}>{event.dateTimeTo ? formatDate(event.dateTimeFrom) +
                                                 " - " + formatDate(event.dateTimeTo) : formatDate(event.dateTimeFrom)}</div>
@@ -183,7 +184,7 @@ export const EventItemPage = () => {
                                     <div className={styles.section_row}>
                                         {event?.format ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.format")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.format")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.format == EventFormat.Online ?
                                                     FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>
@@ -191,7 +192,7 @@ export const EventItemPage = () => {
 
                                         {event?.link ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.link")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.link")}</div>
                                                 <div className={styles.section_base_text}>{event.link}</div>
                                             </div>
                                             : <></>}
@@ -201,7 +202,7 @@ export const EventItemPage = () => {
                                 <>
                                     {event?.dateTimeTo ?
                                         <div className={styles.section_item_block}>
-                                            <div className={styles.section_name_text}>{t("events.date")}</div>
+                                            <div className={styles.section_name_text}>{i18next("events.date")}</div>
                                             <div
                                                 className={styles.section_base_text}>{event.dateTimeTo ? formatDate(event.dateTimeFrom) +
                                                 " - " + formatDate(event.dateTimeTo) : formatDate(event.dateTimeFrom)}</div>
@@ -211,7 +212,7 @@ export const EventItemPage = () => {
                                     <div className={styles.section_row}>
                                         {event?.format ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.format")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.format")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.format == EventFormat.Online ?
                                                     FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>
@@ -219,7 +220,7 @@ export const EventItemPage = () => {
 
                                         {event?.link ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.link")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.link")}</div>
                                                 <div className={styles.section_base_text}>{event.link}</div>
                                             </div>
                                             : <></>}
@@ -235,7 +236,7 @@ export const EventItemPage = () => {
                                     <div className={styles.section_row}>
                                         <div className={styles.section_item_block}>
                                             <div
-                                                className={styles.section_name_text}>{t("events.date_end_register")}</div>
+                                                className={styles.section_name_text}>{i18next("events.date_end_register")}</div>
                                             <div
                                                 className={styles.section_base_text}>{formatDate(event.registrationLastDate)}</div>
                                         </div>
@@ -244,7 +245,7 @@ export const EventItemPage = () => {
                                     <div className={styles.section_row}>
                                         {event?.dateTimeTo ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.date")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.date")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.dateTimeTo ? formatDate(event.dateTimeFrom) +
                                                     " - " + formatDate(event.dateTimeTo) : formatDate(event.dateTimeFrom)}</div>
@@ -252,7 +253,7 @@ export const EventItemPage = () => {
 
                                         {event?.format ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.format")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.format")}</div>
                                                 <div className={styles.section_base_text}>Оффлайн</div>
                                             </div>
                                             : null}
@@ -262,7 +263,7 @@ export const EventItemPage = () => {
                                         <div className={styles.left_part}>
 
                                             {event?.addressName ? <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("profile.address")}</div>
+                                                <div className={styles.section_name_text}>{i18next("profile.address")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.addressName}</div>
                                             </div> : <></>}
@@ -284,7 +285,7 @@ export const EventItemPage = () => {
                                     <div className={styles.section_row}>
                                         {event?.dateTimeTo ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.date")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.date")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.dateTimeTo ? formatDate(event.dateTimeFrom) +
                                                     " - " + formatDate(event.dateTimeTo) : formatDate(event.dateTimeFrom)}</div>
@@ -292,7 +293,7 @@ export const EventItemPage = () => {
 
                                         {event?.format ?
                                             <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("events.format")}</div>
+                                                <div className={styles.section_name_text}>{i18next("events.format")}</div>
                                                 <div className={styles.section_base_text}>Оффлайн</div>
                                             </div>
                                             : null}
@@ -302,7 +303,7 @@ export const EventItemPage = () => {
                                         <div className={styles.left_part}>
 
                                             {event?.addressName ? <div className={styles.section_item_block}>
-                                                <div className={styles.section_name_text}>{t("profile.address")}</div>
+                                                <div className={styles.section_name_text}>{i18next("profile.address")}</div>
                                                 <div
                                                     className={styles.section_base_text}>{event.addressName}</div>
                                             </div> : <></>}

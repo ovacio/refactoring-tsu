@@ -8,7 +8,7 @@ import {useRequest} from "../../hooks/useRequest.ts";
 import {useNotification} from "../../context/NotificationContext.tsx";
 
 export const RegisterModal = ({ isOpen, onClose, onSuccess, eventId}: {isOpen: boolean, onClose: () => void, onSuccess: () => void, eventId: string}) => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { request } = useRequest();
     const { notify } = useNotification();
 
@@ -23,7 +23,7 @@ export const RegisterModal = ({ isOpen, onClose, onSuccess, eventId}: {isOpen: b
         e.preventDefault();
 
         if (name.length <= 0) {
-            notify('warning', t("services.title_validation"));
+            notify('warning', i18next("services.title_validation"));
             return;
         }
 
@@ -39,8 +39,8 @@ export const RegisterModal = ({ isOpen, onClose, onSuccess, eventId}: {isOpen: b
         await request(
             EventService.registerExternal(dto),
             {
-                successMessage: t("events.success_register"),
-                errorMessage: t("events.failed_register"),
+                successMessage: i18next("events.success_register"),
+                errorMessage: i18next("events.failed_register"),
                 onSuccess: () => {
                     onClose();
                     onSuccess();
@@ -58,18 +58,18 @@ export const RegisterModal = ({ isOpen, onClose, onSuccess, eventId}: {isOpen: b
             <div className={styles.modal}>
                 <CloseModal onClick={onClose} className={styles.close_button}/>
 
-                <p className={styles.modal_title}>{t("events.register_modal_title")}</p>
+                <p className={styles.modal_title}>{i18next("events.register_modal_title")}</p>
 
                 <form onSubmit={handleSubmit} className={styles.modal_form}>
-                    <ItemInput label={t("events.FIO")} value={name} onChange={(e) => setName(e.target.value)} type="text"/>
-                    <ItemInput label={t("profile.phone")} value={phone} onChange={(e) => setPhone(e.target.value)}
+                    <ItemInput label={i18next("events.FIO")} value={name} onChange={(e) => setName(e.target.value)} type="text"/>
+                    <ItemInput label={i18next("profile.phone")} value={phone} onChange={(e) => setPhone(e.target.value)}
                                type="phone"/>
-                    <ItemInput label={t("profile.email")} value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
-                    <ItemInput label={t("profile.add_info")} value={addInfo} onChange={(e) => setAddInfo(e.target.value)} type="textarea"/>
+                    <ItemInput label={i18next("profile.email")} value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
+                    <ItemInput label={i18next("profile.add_info")} value={addInfo} onChange={(e) => setAddInfo(e.target.value)} type="textarea"/>
 
                     <div className={styles.buttons_container}>
-                        <button className={styles.button_primary} type="submit">{t("common.save")}</button>
-                        <button className={styles.button_outlined} onClick={onClose}>{t("common.cancel")}</button>
+                        <button className={styles.button_primary} type="submit">{i18next("common.save")}</button>
+                        <button className={styles.button_outlined} onClick={onClose}>{i18next("common.cancel")}</button>
                     </div>
                 </form>
             </div>

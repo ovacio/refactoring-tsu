@@ -12,7 +12,7 @@ import { BREADCRUMB_SEPARATOR } from "../../constants/event-constants/event.cons
 
 
 export const AdminItemUserPage = () => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { userId } = useParams<{ userId: string }>();
     const [profile, setProfile] = useState<ProfileDto | null>(null);
     const [avatarUrl, setAvatarUrl] = useState<string | undefined>();
@@ -58,11 +58,11 @@ export const AdminItemUserPage = () => {
                     return;
                 }
 
-                const url = await fetchFileById(data.avatar.id);
-                setAvatarUrl(url);
+                const pictureObjectUrl = await fetchFileById(data.avatar.id);
+                setAvatarUrl(pictureObjectUrl);
 
                 return () => {
-                    if (url) URL.revokeObjectURL(url);
+                    if (pictureObjectUrl) URL.revokeObjectURL(pictureObjectUrl);
                 };
             } catch (error) {
                 console.error("Ошибка загрузки профиля:", error);
@@ -75,19 +75,19 @@ export const AdminItemUserPage = () => {
 
     return(
         <div className={styles.item_user_page}>
-            <h1 className={styles.title}>{t("administration.administration")}</h1>
+            <h1 className={styles.title}>{i18next("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
-                    {t("administration.administration")}
+                    {i18next("administration.administration")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN_USERS} className={styles.breadcrumb_link}>
-                    {t("administration.users")}
+                    {i18next("administration.users")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN_USERS} className={styles.breadcrumb_active}>
@@ -116,38 +116,38 @@ export const AdminItemUserPage = () => {
 
                 <div className={styles.left_data_container}>
                     <div className={styles.section}>
-                        <p className={styles.section_header_text}>{t("administration.data")}</p>
+                        <p className={styles.section_header_text}>{i18next("administration.data")}</p>
 
                         <div className={styles.section_item_block}>
-                            <p className={styles.section_name_text}>{t("profile.gender")}:</p>
+                            <p className={styles.section_name_text}>{i18next("profile.gender")}:</p>
                             <p className={styles.section_base_text}>{profile?.gender == Gender.Female ? "Женский" : profile?.gender == Gender.Male ? "Мужской" : "Не определен"}</p>
                         </div>
 
                         <div className={styles.section_item_block}>
-                            <p className={styles.section_name_text}>{t("profile.birthday")}:</p>
+                            <p className={styles.section_name_text}>{i18next("profile.birthday")}:</p>
                             <p className={styles.section_base_text}>{profile?.birthDate}</p>
                         </div>
 
                         <div className={styles.section_item_block}>
-                            <p className={styles.section_name_text}>{t("profile.email")}:</p>
+                            <p className={styles.section_name_text}>{i18next("profile.email")}:</p>
                             <p className={styles.section_base_text}>{profile?.email}</p>
                         </div>
 
                     </div>
 
                     <div className={styles.section}>
-                        <p className={styles.section_header_text}>{t("profile.contacts")}</p>
+                        <p className={styles.section_header_text}>{i18next("profile.contacts")}</p>
 
                         {profile?.contacts?.map((contact, index) => (
                             <div key={index} className={styles.section_item_block}>
                                 <p className={styles.section_name_text}>
                                     {contact.type === ContactTypes.Phone
-                                        ? t("profile.phone")
+                                        ? i18next("profile.phone")
                                         : contact.type === ContactTypes.Email
-                                            ? t("profile.additional_email")
+                                            ? i18next("profile.additional_email")
                                             : contact.type === ContactTypes.SocialMedia
-                                                ? t("profile.social_media")
-                                                : t("profile.add_info")}:
+                                                ? i18next("profile.social_media")
+                                                : i18next("profile.add_info")}:
                                 </p>
                                 <p className={styles.section_base_text}>{contact.value}</p>
                             </div>

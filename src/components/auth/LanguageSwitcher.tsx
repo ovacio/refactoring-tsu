@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import {Icons} from "../../assets/icons";
 
 export const LanguageSwitcher = () => {
-    const {i18n, t} = useTranslation('common');
+    const {i18n, t: i18next} = useTranslation('common');
     const [isOpen, setIsOpen] = React.useState(false);
 
     const currentLanguage = i18n.language === 'ru' ? Language.ru : Language.en;
@@ -24,14 +24,14 @@ export const LanguageSwitcher = () => {
                 {currentLanguage === Language.ru ? (
                     <>
                         <label htmlFor={styles.icon} className={styles.label}>
-                            {t('languages.ru')}
+                            {i18next('languages.ru')}
                         </label>
                         <Icons.RusIcon width={34} height={20} id={styles.icon}/>
                     </>
                 ) : (
                     <>
                         <label htmlFor={styles.icon} className={styles.label}>
-                            {t('languages.en')}
+                            {i18next('languages.en')}
                         </label>
                         <UkIcon width={34} height={20} id={styles.icon}/>
                     </>

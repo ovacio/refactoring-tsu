@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const CertificateTabs = ({ type, educationEntries = [], employee }: Props) => {
-    const { t } = useTranslation("common");
+    const { t: i18next } = useTranslation("common");
     const [activeTabIndex, setActiveTabIndex] = useState(0);
 
     const [certificateType, setCertificateType] = useState<CertificateType>();
@@ -128,8 +128,8 @@ export const CertificateTabs = ({ type, educationEntries = [], employee }: Props
             };
 
             await request( CertificateService.createCertificate(data),
-                {successMessage: t("certificates.success"),
-                errorMessage: t("certificates.error")}
+                {successMessage: i18next("certificates.success"),
+                errorMessage: i18next("certificates.error")}
             )
 
             await fetchCertificates();
@@ -147,14 +147,14 @@ export const CertificateTabs = ({ type, educationEntries = [], employee }: Props
                 <>
                     {isMobile ? (
                         <div className={styles.input_wrapper_full}>
-                            <label className={styles.label_choose}>{t("certificates.user_type")}</label>
+                            <label className={styles.label_choose}>{i18next("certificates.user_type")}</label>
                             <select
                                 className={styles.item_input_choose}
                                 value={currentUserType}
                                 onChange={(e) => setCurrentUserType(e.target.value as UserType)}
                             >
-                                <option value={UserType.Student}>{t("certificates.student")}</option>
-                                <option value={UserType.Employee}>{t("certificates.employee")}</option>
+                                <option value={UserType.Student}>{i18next("certificates.student")}</option>
+                                <option value={UserType.Employee}>{i18next("certificates.employee")}</option>
                             </select>
                         </div>
                     ) : (
@@ -163,13 +163,13 @@ export const CertificateTabs = ({ type, educationEntries = [], employee }: Props
                                 className={`${styles.tab} ${currentUserType === UserType.Student ? styles.active : EMPTY_STRING}`}
                                 onClick={() => setCurrentUserType(UserType.Student)}
                             >
-                                {t("certificates.student")}
+                                {i18next("certificates.student")}
                             </button>
                             <button
                                 className={`${styles.tab} ${currentUserType === UserType.Employee ? styles.active : EMPTY_STRING}`}
                                 onClick={() => setCurrentUserType(UserType.Employee)}
                             >
-                                {t("certificates.employee")}
+                                {i18next("certificates.employee")}
                             </button>
                         </div>
                     )}
@@ -222,10 +222,10 @@ export const downloadFile = async (file: FileDto) => {
         const response = await FileService.getFile(file.id);
 
         const blob = new Blob([response.data], {type: response.headers['content-type'] || 'text/plain'});
-        const url = window.URL.createObjectURL(blob);
+        const pictureObjectUrl = window.URL.createObjectURL(blob);
 
         const link = document.createElement("a");
-        link.href = url;
+        link.href = pictureObjectUrl;
 
         const ext = file.extension?.toLowerCase() || 'txt';
         const fileName = `${file.name ?? 'file'}.${ext}`;
@@ -234,7 +234,7 @@ export const downloadFile = async (file: FileDto) => {
         document.body.appendChild(link);
         link.click();
         link.remove();
-        window.URL.revokeObjectURL(url);
+        window.URL.revokeObjectURL(pictureObjectUrl);
     } catch (error) {
         console.error("Ошибка при скачивании файла", error);
     }

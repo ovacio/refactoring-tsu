@@ -15,7 +15,7 @@ import {fetchFileById} from "../../pages/administration/AdminItemUserPage.tsx";
 import { EMPTY_STRING } from '../../constants/event-constants/event.constants.ts';
 
 export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { isOpen: boolean, onClose: () => void, onSuccess: () => void, serviceToEdit?: UsefulServiceDto | null;}) => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { request } = useRequest();
     const { notify } = useNotification();
 
@@ -35,8 +35,8 @@ export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { 
         const loadImage = async () => {
             if (serviceToEdit?.logo?.id) {
                 try {
-                    const url = await fetchFileById(serviceToEdit.logo.id);
-                    setLogoUrl(url);
+                    const pictureObjectUrl = await fetchFileById(serviceToEdit.logo.id);
+                    setLogoUrl(pictureObjectUrl);
                     setLogoName(serviceToEdit.logo.name);
                     setHavePhoto(true);
                 } catch (err) {
@@ -55,7 +55,7 @@ export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { 
         e.preventDefault();
 
         if (title.length <= 0) {
-            notify('warning', t("services.title_validation"));
+            notify('warning', i18next("services.title_validation"));
             return;
         }
 
@@ -80,7 +80,7 @@ export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { 
         await request(
             requestFn,
             {
-                successMessage: t("services.success"),
+                successMessage: i18next("services.success"),
                 onSuccess: () => {
                     onClose();
                     onSuccess();
@@ -125,25 +125,25 @@ export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { 
             <div className={styles.modal}>
                 <CloseModal onClick={onClose} className={styles.close_button}/>
 
-                <p className={styles.modal_title}>{t("services.adding")}</p>
+                <p className={styles.modal_title}>{i18next("services.adding")}</p>
 
                 <form onSubmit={handleSubmit} className={styles.modal_form}>
                     <ItemInput
-                        label={t("services.name")}
+                        label={i18next("services.name")}
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
 
                     <ItemInput
-                        label={t("services.link")}
+                        label={i18next("services.link")}
                         type="text"
                         value={link}
                         onChange={(e) => setLink(e.target.value)}
                     />
 
                     <div className={styles.input_wrapper}>
-                        <label className={styles.label_choose}>{t("services.type")}</label>
+                        <label className={styles.label_choose}>{i18next("services.type")}</label>
                         <select className={styles.item_input_choose} value={category} onChange={(e) => setCategory(e.target.value)}>
                             <option value={UsefulServiceCategory.ForAll}>Общий</option>
                             <option value={UsefulServiceCategory.Students}>Для студентов</option>
@@ -152,14 +152,14 @@ export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { 
                     </div>
 
                     <ItemInput
-                        label={t("services.description")}
+                        label={i18next("services.description")}
                         type="textarea"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
 
                     <ItemInput
-                        label={t("services.condition")}
+                        label={i18next("services.condition")}
                         type="textarea"
                         value={termsOfDisctribution}
                         onChange={(e) => setTermsOfDisctribution(e.target.value)}
@@ -172,8 +172,8 @@ export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { 
 
 
                     <div className={styles.buttons_container}>
-                        <button className={styles.button_primary} type="submit">{t("common.save")}</button>
-                        <button className={styles.button_outlined} onClick={onClose}>{t("common.cancel")}</button>
+                        <button className={styles.button_primary} type="submit">{i18next("common.save")}</button>
+                        <button className={styles.button_outlined} onClick={onClose}>{i18next("common.cancel")}</button>
                     </div>
 
                 </form>

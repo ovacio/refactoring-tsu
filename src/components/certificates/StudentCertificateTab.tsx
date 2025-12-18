@@ -40,7 +40,7 @@ export const StudentCertificateTab = ({
                                           setCertificateView,
                                           isLoading,
                                       }: StudentTabProps) => {
-    const { t } = useTranslation("common");
+    const { t: i18next } = useTranslation("common");
 
     return (
         <>
@@ -52,8 +52,8 @@ export const StudentCertificateTab = ({
                         className={`${styles.tab} ${activeTabIndex === index ? styles.active : EMPTY_STRING}`}
                     >
                         <p>{entry.faculty.name}</p>
-                        <p>{t("certificates.education_level")}: {entry.educationLevel.name}</p>
-                        <p>{t("certificates.status")}: {entry.educationStatus.name}</p>
+                        <p>{i18next("certificates.education_level")}: {entry.educationLevel.name}</p>
+                        <p>{i18next("certificates.status")}: {entry.educationStatus.name}</p>
                     </button>
                 ))}
             </div>
@@ -64,13 +64,13 @@ export const StudentCertificateTab = ({
                     <div className={styles.section_row}>
 
                         <div className={styles.section_item_block}>
-                            <h2 className={styles.section_name_text}>{t("certificates.education_level")}</h2>
+                            <h2 className={styles.section_name_text}>{i18next("certificates.education_level")}</h2>
                             <span
                                 className={styles.section_base_text}>{educationEntries[activeTabIndex].educationLevel.name}</span>
                         </div>
 
                         <div className={styles.section_item_block}>
-                            <h2 className={styles.section_name_text}>{t("certificates.status")}</h2>
+                            <h2 className={styles.section_name_text}>{i18next("certificates.status")}</h2>
                             <span
                                 className={styles.section_base_text}>{educationEntries[activeTabIndex].educationStatus.name}</span>
                         </div>
@@ -78,20 +78,20 @@ export const StudentCertificateTab = ({
                     </div>
 
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("education.faculty")}</div>
+                        <div className={styles.section_name_text}>{i18next("education.faculty")}</div>
                         <div className={styles.section_base_text}>{educationEntries[activeTabIndex].faculty.name}</div>
                     </div>
 
                     <div className={styles.section_row}>
 
                         <div className={styles.section_item_block}>
-                            <div className={styles.section_name_text}>{t("education.direction")}</div>
+                            <div className={styles.section_name_text}>{i18next("education.direction")}</div>
                             <div
                                 className={styles.section_base_text}>{educationEntries[activeTabIndex].educationDirection.name}</div>
                         </div>
 
                         <div className={styles.section_item_block}>
-                            <div className={styles.section_name_text}>{t("education.group")}</div>
+                            <div className={styles.section_name_text}>{i18next("education.group")}</div>
                             <div
                                 className={styles.section_base_text}>{educationEntries[activeTabIndex].creditBooknumber}</div>
                         </div>
@@ -102,11 +102,11 @@ export const StudentCertificateTab = ({
             )}
 
             <div>
-                <p className={styles.order_text}>{t("certificates.order_certificate")}</p>
+                <p className={styles.order_text}>{i18next("certificates.order_certificate")}</p>
                 <div className={styles.order_row}>
 
                     <div className={styles.input_wrapper}>
-                        <label className={styles.label_choose}>{t("certificates.type")}</label>
+                        <label className={styles.label_choose}>{i18next("certificates.type")}</label>
                         <select className={styles.item_input_choose} value={certificateType}
                                 onChange={(e) => setCertificateType(e.target.value as CertificateType)}>
                             <option value={undefined}></option>
@@ -116,7 +116,7 @@ export const StudentCertificateTab = ({
                     </div>
 
                     <div className={styles.input_wrapper}>
-                        <label className={styles.label_choose}>{t("certificates.view")}</label>
+                        <label className={styles.label_choose}>{i18next("certificates.view")}</label>
                         <select className={styles.item_input_choose} value={certificateView}
                                 onChange={(e) => setCertificateView(e.target.value as CertificateReceiveType)}>
                             <option value={undefined}></option>
@@ -130,15 +130,15 @@ export const StudentCertificateTab = ({
                         className={styles.order_button}
                         onClick={handleOrderCertificate}
                     >
-                        {t("certificates.order")}
+                        {i18next("certificates.order")}
                     </button>
 
                 </div>
-                {isLoading ? t("common.loading") : ''}
+                {isLoading ? i18next("common.loading") : ''}
             </div>
 
             {certificatesLoading ? (
-                <p style={{ padding: '16px'}}>{t("common.loading")}</p>
+                <p style={{ padding: '16px'}}>{i18next("common.loading")}</p>
             ) : (
                 <div className={styles.certificates_container}>
 
@@ -150,11 +150,11 @@ export const StudentCertificateTab = ({
                                     от {certificate.dateOfForming ? `${formatDate(certificate.dateOfForming)} ${formatTime(certificate.dateOfForming)}` : EMPTY_STRING}
                                 </div>
                                 <div className={styles.section_name_text}>
-                                    {t("certificates.type")}: {certificate.type == CertificateType.ForPlaceWhereNeeded ?
+                                    {i18next("certificates.type")}: {certificate.type == CertificateType.ForPlaceWhereNeeded ?
                                     "По месту требования" : "Для  пенсионных выплат граждан Казахстана"}
                                 </div>
                                 <div className={styles.section_name_text}>
-                                    {t("certificates.view")}: {certificate.receiveTypeEnumDto?.displayName || certificate.receiveType}
+                                    {i18next("certificates.view")}: {certificate.receiveTypeEnumDto?.displayName || certificate.receiveType}
                                 </div>
                             </div>
 
@@ -164,12 +164,12 @@ export const StudentCertificateTab = ({
                                         <button
                                             className={styles.save_signature_button}
                                             onClick={() => downloadFile(certificate.signatureFile)}>
-                                            <SignatureSave/> {t("certificates.signature")}
+                                            <SignatureSave/> {i18next("certificates.signature")}
                                         </button>
                                         <button
                                             className={styles.save_certificate_button}
                                             onClick={() => downloadFile(certificate.certificateFile)}>
-                                            <CertificateSave/> {t("certificates.save_certificate")}
+                                            <CertificateSave/> {i18next("certificates.save_certificate")}
                                         </button>
                                     </> : <></>
                                 }

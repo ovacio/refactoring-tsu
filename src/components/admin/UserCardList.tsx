@@ -7,17 +7,17 @@ interface UserCardListProps {
 }
 
 export const UserCardList = ( props: UserCardListProps) => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
 
     return (
         <div className={styles.user_card_list}>
             <p className={styles.card_header_text}>{props.user.lastName} {props.user.firstName} {props.user.patronymic}</p>
             <div className={styles.user_card_row}>
-                <p className={styles.card_base_text}>{t('profile.birthday')}: </p> <p
+                <p className={styles.card_base_text}>{i18next('profile.birthday')}: </p> <p
                 className={styles.card_info_text}>{props.user.birthDate}</p>
             </div>
             <div className={styles.user_card_row}>
-                <p className={styles.card_base_text}>{t('profile.email')}: </p> <p
+                <p className={styles.card_base_text}>{i18next('profile.email')}: </p> <p
                 className={styles.card_info_text}>{props.user.email}</p>
             </div>
         </div>

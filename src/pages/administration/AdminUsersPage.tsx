@@ -17,7 +17,7 @@ import { BREADCRUMB_SEPARATOR, CYRILLIC_ALPHABET, EMPTY_STRING } from "../../con
 import { ADMIN_USERS_CONSTANTS, ViewMode } from "../../constants/admin-users-constants/admin-users-constants.ts";
 
 export const AdminUsersPage = () => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { request } = useRequest();
 
     const [users, setUsers] = useState<ProfileShortDto[]>([]);
@@ -52,7 +52,7 @@ export const AdminUsersPage = () => {
                     pageSize
                 ),
                 {
-                    errorMessage: t("common.access_denied"),
+                    errorMessage: i18next("common.access_denied"),
                 }
             );
             setUsers(response.data.results);
@@ -95,19 +95,19 @@ export const AdminUsersPage = () => {
 
     return (
         <div className={styles.admin_users_page}>
-            <h1 className={styles.title}>{t("administration.administration")}</h1>
+            <h1 className={styles.title}>{i18next("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
-                    {t("administration.administration")}
+                    {i18next("administration.administration")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN_USERS} className={styles.breadcrumb_active_red}>
-                    {t("administration.users")}
+                    {i18next("administration.users")}
                 </Link>
             </div>
 
@@ -117,13 +117,13 @@ export const AdminUsersPage = () => {
                     <input
                         className={styles.search_input}
                         type="text"
-                        placeholder={t("administration.placeholder")}
+                        placeholder={i18next("administration.placeholder")}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
                 <button type="submit" className={styles.search_button}>
-                    {t("administration.search")}
+                    {i18next("administration.search")}
                 </button>
             </form>
 
@@ -168,9 +168,9 @@ export const AdminUsersPage = () => {
 
             <div className={styles.users_container}>
                 {loading ? (
-                    <p>{t("common.loading")}</p>
+                    <p>{i18next("common.loading")}</p>
                 ) : users.length === 0 ? (
-                    <p>{t("administration.no_users")}</p>
+                    <p>{i18next("administration.no_users")}</p>
                 ) : viewMode === ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST ? (
                     users.map((user) => (
                         <Link to={ADMIN_ROUTES.ADMIN_USER(user.id)} key={user.id} className={styles.user_link}>

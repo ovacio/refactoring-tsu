@@ -13,26 +13,26 @@ interface ServicePublicCardProps {
 }
 
 export const ServicePublicCard = (props: ServicePublicCardProps) => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { notify } = useNotification();
 
-    const [pictureUrl, setPictureUrl] = useState<string | undefined>();
+    const [serviceImageUrl, setServiceImageUrl] = useState<string | undefined>();
 
     const isMobile = useMediaQuery({ maxWidth: 600 });
 
     const handleServiceLinkClick = (link: string) => {
         try {
-            const url = new URL(link);
+            const pictureObjectUrl = new URL(link);
 
-            if (!['http:', 'https:'].includes(url.protocol)) {
-                notify('error', t("services.invalid_link_protocol"));
+            if (!['http:', 'https:'].includes(pictureObjectUrl.protocol)) {
+                notify('error', i18next("services.invalid_link_protocol"));
                 return;
             }
 
             window.open(link, '_blank', 'noopener,noreferrer');
         } catch (e) {
 
-            notify('error', t("services.invalid_link"));
+            notify('error', i18next("services.invalid_link"));
         }
     };
 
@@ -41,11 +41,11 @@ export const ServicePublicCard = (props: ServicePublicCardProps) => {
             if (!props.service || !props.service.id) return;
 
             if (props.service.logo !== null) {
-                const url = await fetchFileById(props.service.logo.id);
-                setPictureUrl(url);
+                const pictureObjectUrl = await fetchFileById(props.service.logo.id);
+                setServiceImageUrl(pictureObjectUrl);
             }
             else {
-                setPictureUrl(defaultAvatar);
+                setServiceImageUrl(defaultAvatar);
             }
 
         };
@@ -66,14 +66,14 @@ export const ServicePublicCard = (props: ServicePublicCardProps) => {
                             className={styles.search_button}
                             onClick={() => handleServiceLinkClick(props.service.link)}
                         >
-                            {t("services.link_service")}
+                            {i18next("services.link_service")}
                             <LinkUsefulService/>
                         </button>
                     </div>
 
                     <div className={styles.public_service_main_part}>
                         <div className={styles.service_image}>
-                            <img src={pictureUrl} alt="picture" className={styles.service_image}/>
+                            <img src={serviceImageUrl} alt="picture" className={styles.service_image}/>
                         </div>
 
                         <div className={styles.section_container}>
@@ -83,7 +83,7 @@ export const ServicePublicCard = (props: ServicePublicCardProps) => {
                             </div>
 
                             <div className={styles.section_item_block}>
-                                <div className={styles.section_name_text}>{t("services.condition")}</div>
+                                <div className={styles.section_name_text}>{i18next("services.condition")}</div>
                                 <div className={styles.section_base_text}>{props.service.termsOfDisctribution}</div>
                             </div>
                         </div>
@@ -91,7 +91,7 @@ export const ServicePublicCard = (props: ServicePublicCardProps) => {
                 </> :
                 <div className={styles.public_service_mobile_container}>
                     <div className={styles.service_public_image}>
-                        <img src={pictureUrl} alt="picture" className={styles.service_image}/>
+                        <img src={serviceImageUrl} alt="picture" className={styles.service_image}/>
                     </div>
 
                     <p className={styles.title_service}>{props.service.title}</p>
@@ -101,7 +101,7 @@ export const ServicePublicCard = (props: ServicePublicCardProps) => {
                     </div>
 
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("services.condition")}</div>
+                        <div className={styles.section_name_text}>{i18next("services.condition")}</div>
                         <div className={styles.section_base_text}>{props.service.termsOfDisctribution}</div>
                     </div>
 
@@ -110,7 +110,7 @@ export const ServicePublicCard = (props: ServicePublicCardProps) => {
                         className={styles.link_button}
                         onClick={() => handleServiceLinkClick(props.service.link)}
                     >
-                        {t("services.link_service")}
+                        {i18next("services.link_service")}
                         <LinkUsefulService/>
                     </button>
 

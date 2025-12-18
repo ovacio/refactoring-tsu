@@ -13,7 +13,7 @@ import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
 import { BREADCRUMB_SEPARATOR, PAGE_DEFAULT, PAGE_SIZE } from "../constants/event-constants/event.constants.ts";
 
 export const ServicesPage = () => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { request } = useRequest();
     const { profile } = useProfile();
 
@@ -101,29 +101,29 @@ export const ServicesPage = () => {
     };
 
     if (profileLoading) {
-        return <p>{t("common.loading")}</p>;
+        return <p>{i18next("common.loading")}</p>;
     }
 
     return (
         <div className={styles.useful_services_page}>
-            <h1 className={styles.title}>{t("administration.services")}</h1>
+            <h1 className={styles.title}>{i18next("administration.services")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
 
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={PUBLIC_ROUTES.USEFUL_SERVICES} className={styles.breadcrumb_active}>
-                    {t("administration.services")}
+                    {i18next("administration.services")}
                 </Link>
             </div>
 
             <div className={styles.public_services_container}>
                 {loading ? (
-                    <p>{t("common.loading")}</p>
+                    <p>{i18next("common.loading")}</p>
                 ) : filteredServices.length === 0 ? (
-                    <p>{t("administration.no_users")}</p>
+                    <p>{i18next("administration.no_users")}</p>
                 ) : filteredServices.map((service) => (
                     <ServicePublicCard key={service.id} service={service}/>
                 ))}
