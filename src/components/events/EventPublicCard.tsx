@@ -2,7 +2,7 @@ import styles from "../admin/styles/EventCard.module.css"
 import {fetchFileById} from "../../pages/administration/AdminItemUserPage.tsx";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import defaultAvatar from "../assets/jpg/default_avatar.jpg";
+import defaultAvatar from "../../assets/jpg/default_avatar.jpg";
 import {EventFormat, EventShortDto, EventStatus} from "../../services/event.service.ts";
 import {Link} from "react-router-dom";
 import { PUBLIC_ROUTES } from "../../constants/routes/routes.ts";

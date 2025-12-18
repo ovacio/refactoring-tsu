@@ -8,6 +8,8 @@ export const CYRILLIC_ALPHABET = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦ
 export const PAGE_SIZE = 15;
 export const PAGE_DEFAULT = 1;
 
+export const TIMEZONE_OFFSET = 420;
+
 export const FORMAT_TEXTS = {
   [EventFormat.Online]: "Онлайн",
   [EventFormat.Offline]: "Оффлайн",
