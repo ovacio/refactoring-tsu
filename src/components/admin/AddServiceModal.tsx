@@ -12,17 +12,18 @@ import {useRequest} from "../../hooks/useRequest.ts";
 import ImageUpload from "./ImageUpload.tsx";
 import {useNotification} from "../../context/NotificationContext.tsx";
 import {fetchFileById} from "../../pages/administration/AdminItemUserPage.tsx";
+import { EMPTY_STRING } from '../../constants/event-constants/event.constants.ts';
 
 export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { isOpen: boolean, onClose: () => void, onSuccess: () => void, serviceToEdit?: UsefulServiceDto | null;}) => {
     const { t } = useTranslation('common');
     const { request } = useRequest();
     const { notify } = useNotification();
 
-    const [title, setTitle] = useState("");
-    const [link, setLink] = useState("");
+    const [title, setTitle] = useState(EMPTY_STRING);
+    const [link, setLink] = useState(EMPTY_STRING);
     const [category, setCategory] = useState("ForAll");
-    const [description, setDescription] = useState("");
-    const [termsOfDisctribution, setTermsOfDisctribution] = useState("");
+    const [description, setDescription] = useState(EMPTY_STRING);
+    const [termsOfDisctribution, setTermsOfDisctribution] = useState(EMPTY_STRING);
     const [logoId, setLogoId] = useState<string | null>(null);
 
     const [logoUrl, setLogoUrl] = useState<string | null>(null);
@@ -92,17 +93,17 @@ export const AddServiceModal = ({ isOpen, onClose, onSuccess, serviceToEdit}: { 
     useEffect(() => {
         if (serviceToEdit) {
             setTitle(serviceToEdit.title);
-            setLink(serviceToEdit.link || "");
+            setLink(serviceToEdit.link || EMPTY_STRING);
             setCategory(serviceToEdit.category);
-            setDescription(serviceToEdit.description || "");
-            setTermsOfDisctribution(serviceToEdit.termsOfDisctribution || "");
+            setDescription(serviceToEdit.description || EMPTY_STRING);
+            setTermsOfDisctribution(serviceToEdit.termsOfDisctribution || EMPTY_STRING);
             setLogoId(logoId || null);
         } else {
-            setTitle("");
-            setLink("");
+            setTitle(EMPTY_STRING);
+            setLink(EMPTY_STRING);
             setCategory("ForAll");
-            setDescription("");
-            setTermsOfDisctribution("");
+            setDescription(EMPTY_STRING);
+            setTermsOfDisctribution(EMPTY_STRING);
             setLogoId(null);
         }
     }, [serviceToEdit, isOpen]);

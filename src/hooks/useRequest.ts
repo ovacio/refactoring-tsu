@@ -1,3 +1,4 @@
+import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
 import { useNotification } from "../context/NotificationContext.tsx";
 import {useNavigate} from "react-router-dom";
 
@@ -18,7 +19,7 @@ export function useRequest() {
         }
         catch (err: any) {
             if (err.response?.status === 500) {
-                navigate('/internalservererror');
+                navigate(PUBLIC_ROUTES.SERVER_ERROR);
             } else if (err.response?.data?.errors) {
                 const errors = err.response.data.errors;
                 const messages = Object.values(errors).flat() as string[];

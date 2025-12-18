@@ -1,19 +1,23 @@
 import {ItemButton} from "../components/common/ui/button/ItemButton.tsx";
+import { EMPTY_STRING } from "../constants/event-constants/event.constants.ts";
+import { HTTP_STATUS } from "../constants/http-status/http-status.ts";
 import styles from "./styles/ErrorPage.module.css"
 import {useNavigate} from "react-router-dom";
 
+type ErrorPageErrorCode = typeof HTTP_STATUS.NOT_FOUND | typeof HTTP_STATUS.INTERNAL_SERVER_ERROR;
+
 interface ErrorPageProps {
-    errorCode: '404' | '500';
+    errorCode: ErrorPageErrorCode;
 }
 
 const typeConfig = {
-    "404": {
+    [HTTP_STATUS.NOT_FOUND]: {
         text: "Page not Found",
         translate: "Страница не найдена",
         description: ["Вероятно такой страницы не существует или вы ошиблись", "при вводе адреса в строку браузера"],
-        info: ""
+        info: EMPTY_STRING
     },
-    "500": {
+    [HTTP_STATUS.INTERNAL_SERVER_ERROR]: {
         text: "Internal Server Error",
         translate: "Ошибка сервера",
         description: ["Возможно на сервере произошла внутренняя ошибка", "или проводятся кратковременные, технические работы!"],

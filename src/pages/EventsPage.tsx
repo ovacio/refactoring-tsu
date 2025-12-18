@@ -10,6 +10,8 @@ import {Pagination} from "@mui/material";
 import {EventPublicCard} from "../components/events/EventPublicCard.tsx";
 import {useProfile} from "../context/ProfileContext.tsx";
 import {UserType} from "../services/profile.service.ts";
+import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING, PAGE_DEFAULT, PAGE_SIZE } from "../constants/event-constants/event.constants.ts";
 
 export const EventsPage = () => {
     const { t } = useTranslation('common');
@@ -21,15 +23,15 @@ export const EventsPage = () => {
     const [metadata, setMetadata] = useState<PagedListMetaData | null>(null);
     const [loading, setLoading] = useState(false);
     const [profileLoading, setProfileLoading] = useState(true);
-    const pageSize = 15;
+    const pageSize = PAGE_SIZE;
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const getParam = (key: string) => searchParams.get(key) || '';
+    const getParam = (key: string) => searchParams.get(key) || EMPTY_STRING;
 
     const [name, setName] = useState<string>(() => getParam("name"));
     const [date, setDate] = useState<string>(() => getParam("date"));
     const [currentPage, setCurrentPage] = useState<number>(() =>
-        parseInt(searchParams.get("page") || "1")
+        parseInt(searchParams.get("page") || String(PAGE_DEFAULT))
     );
 
     const [isAuth, setIsAuth] = useState(false);
@@ -135,7 +137,7 @@ export const EventsPage = () => {
         };
 
         Object.keys(params).forEach(
-            key => (params[key] === '' || params[key] == null) && delete params[key]
+            key => (params[key] === EMPTY_STRING || params[key] == null) && delete params[key]
         );
 
         setSearchParams(params);
@@ -154,11 +156,11 @@ export const EventsPage = () => {
             <h1 className={styles.title}>{t("events.events")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/events" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.EVENTS} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/events" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={PUBLIC_ROUTES.EVENTS} className={styles.breadcrumb_active}>
                     {t("administration.events")}
                 </Link>
             </div>
@@ -202,7 +204,7 @@ export const EventsPage = () => {
 
             <div className={styles.pagination_container}>
                 <Pagination
-                    count={metadata?.pageCount || 1}
+                    count={metadata?.pageCount || PAGE_DEFAULT}
                     page={currentPage}
                     onChange={handlePageChange}
                 />

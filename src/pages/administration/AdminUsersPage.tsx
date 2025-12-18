@@ -12,6 +12,9 @@ import { Pagination } from "@mui/material";
 import {UserCardList} from "../../components/admin/UserCardList.tsx";
 import {UserCard} from "../../components/admin/UserCard.tsx";
 import SvgSearch from "../../assets/icons/Search.tsx";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR, CYRILLIC_ALPHABET, EMPTY_STRING } from "../../constants/event-constants/event.constants.ts";
+import { ADMIN_USERS_CONSTANTS, ViewMode } from "../../constants/admin-users-constants/admin-users-constants.ts";
 
 export const AdminUsersPage = () => {
     const { t } = useTranslation('common');
@@ -21,23 +24,23 @@ export const AdminUsersPage = () => {
     const [metadata, setMetadata] = useState<PagedListMetaData | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState(EMPTY_STRING);
     const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
-    const [viewMode, setViewMode] = useState<'list' | 'cards'>('list');
+    const [viewMode, setViewMode] = useState<ViewMode>(ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE);
+    const pageSize = ADMIN_USERS_CONSTANTS.PAGE_SIZE;
 
     const [alphabetExpanded, setAlphabetExpanded] = useState(false);
-    const cyrillicLetters = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ".split("");
+    const cyrillicLetters = CYRILLIC_ALPHABET.split(EMPTY_STRING);
 
     const fetchUsers = async () => {
         setLoading(true);
 
         // Если есть выбранная буква, сбрасываем другие поля поиска
-        const emailParam = selectedLetter ? "" : searchQuery.includes("@") ? searchQuery : "";
-        const nameParam = selectedLetter ? "" : !searchQuery.includes("@") ? searchQuery : "";
-        const filterLastNameParam = selectedLetter || "";
+        const emailParam = selectedLetter ? EMPTY_STRING : searchQuery.includes("@") ? searchQuery : EMPTY_STRING;
+        const nameParam = selectedLetter ? EMPTY_STRING : !searchQuery.includes("@") ? searchQuery : EMPTY_STRING;
+        const filterLastNameParam = selectedLetter || EMPTY_STRING;
 
         try {
             const response = await request(
@@ -72,14 +75,14 @@ export const AdminUsersPage = () => {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        setCurrentPage(1);
+        setCurrentPage(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE);
         //fetchUsers();
     };
 
     const handleLetterClick = (letter: string) => {
         setSelectedLetter(letter === selectedLetter ? null : letter);
-        setSearchQuery("");
-        setCurrentPage(1);
+        setSearchQuery(EMPTY_STRING);
+        setCurrentPage(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE);
         setAlphabetExpanded(false);
     };
 
@@ -95,15 +98,15 @@ export const AdminUsersPage = () => {
             <h1 className={styles.title}>{t("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
                     {t("administration.administration")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/users" className={styles.breadcrumb_active_red}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_USERS} className={styles.breadcrumb_active_red}>
                     {t("administration.users")}
                 </Link>
             </div>
@@ -133,7 +136,7 @@ export const AdminUsersPage = () => {
                                 {cyrillicLetters.map((letter) => (
                                     <span
                                         key={letter}
-                                        className={`${styles.alphabet_letter} ${selectedLetter === letter ? styles.active_letter : ''}`}
+                                        className={`${styles.alphabet_letter} ${selectedLetter === letter ? styles.active_letter : EMPTY_STRING}`}
                                         onClick={() => handleLetterClick(letter)}
                                     >
                                         {letter}
@@ -142,7 +145,7 @@ export const AdminUsersPage = () => {
                             </div>
                         ) : (
                             <p className={styles.alphabet_toggle} onClick={toggleAlphabet}>
-                                {selectedLetter ? selectedLetter : 'А - Я'}
+                                {selectedLetter ? selectedLetter : ADMIN_USERS_CONSTANTS.ALPHABET_DEFAULT_LABEL}
                             </p>
                         )}
                     </div>
@@ -151,8 +154,8 @@ export const AdminUsersPage = () => {
 
                 <div className={styles.view_toggle}>
                     <SearchList
-                        onClick={() => setViewMode('list')}
-                        active={viewMode === 'list'}
+                        onClick={() => setViewMode(ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST)}
+                        active={viewMode === ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST}
                         style={{cursor: 'pointer'}}
                     />
                     <SearchCards
@@ -168,16 +171,16 @@ export const AdminUsersPage = () => {
                     <p>{t("common.loading")}</p>
                 ) : users.length === 0 ? (
                     <p>{t("administration.no_users")}</p>
-                ) : viewMode === 'list' ? (
+                ) : viewMode === ADMIN_USERS_CONSTANTS.VIEW_MODE.LIST ? (
                     users.map((user) => (
-                        <Link to={`/admin/users/${user.id}`} key={user.id} className={styles.user_link}>
+                        <Link to={ADMIN_ROUTES.ADMIN_USER(user.id)} key={user.id} className={styles.user_link}>
                             <UserCardList user={user} />
                         </Link>
                     ))
                 ) : (
                     <div className={styles.card_grid}>
                         {users.map((user) => (
-                            <Link to={`/admin/users/${user.id}`} key={user.id} className={styles.user_link}>
+                            <Link to={ADMIN_ROUTES.ADMIN_USER(user.id)} key={user.id} className={styles.user_link}>
                                 <UserCard user={user} />
                             </Link>
                         ))}
@@ -187,7 +190,7 @@ export const AdminUsersPage = () => {
 
             <div className={styles.pagination_container}>
                 <Pagination
-                    count={metadata?.pageCount || 1}
+                    count={metadata?.pageCount || ADMIN_USERS_CONSTANTS.DEFAULT_PAGE}
                     page={currentPage}
                     onChange={handlePageChange}
                 />

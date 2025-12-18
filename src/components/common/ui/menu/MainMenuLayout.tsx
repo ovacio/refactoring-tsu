@@ -4,12 +4,14 @@ import styles from "./MainMenuLayout.module.css";
 import { LanguageSwitcher } from "../../../auth/LanguageSwitcher.tsx";
 import { useMenu } from "../../../../context/MenuContext.tsx";
 import MenuSmall from "../../../../assets/icons/MenuSmall";
+import { PUBLIC_ROUTES } from "../../../../constants/routes/routes.ts";
+import { EMPTY_STRING } from "../../../../constants/event-constants/event.constants.ts";
 
 export const MainMenuLayout = () => {
     const location = useLocation();
     const { isMenuOpen, toggleMenu, isMobile } = useMenu();
 
-    const hideMenuPaths = ["/login", "/internalservererror"];
+    const hideMenuPaths: string[] = [PUBLIC_ROUTES.LOGIN, PUBLIC_ROUTES.SERVER_ERROR];
     const shouldHideMenu = hideMenuPaths.includes(location.pathname);
 
     const showMobileMenu = isMobile && isMenuOpen;
@@ -37,7 +39,7 @@ export const MainMenuLayout = () => {
                 </>
             )}
 
-            <div className={`${styles.content} ${showMobileMenu ? styles.dimmed : ""}`}>
+            <div className={`${styles.content} ${showMobileMenu ? styles.dimmed : EMPTY_STRING}`}>
                 <Outlet />
             </div>
 

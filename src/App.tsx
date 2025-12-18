@@ -16,32 +16,34 @@ import {AdminAddEventPage} from "./pages/administration/AdminAddEventPage.tsx";
 import {AdminEditEventPage} from "./pages/administration/AdminEditEventPage.tsx";
 import {AdminItemEventPage} from "./pages/administration/AdminItemEventPage.tsx";
 import {EventItemPage} from "./pages/EventItemPage.tsx";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "./constants/routes/routes.ts";
+import { HTTP_STATUS } from "./constants/http-status/http-status.ts";
 
 function App() {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="/login" element={<AuthorizationPage />} />
-            <Route path="/internalservererror" element={<ErrorPage errorCode="500" />} />
-            <Route path="*" element={<ErrorPage errorCode="404" />} />
+            <Route path={PUBLIC_ROUTES.DEFAULT} element={<Navigate to={PUBLIC_ROUTES.LOGIN} replace />} />
+            <Route path={PUBLIC_ROUTES.LOGIN} element={<AuthorizationPage />} />
+            <Route path={PUBLIC_ROUTES.SERVER_ERROR} element={<ErrorPage errorCode={HTTP_STATUS.INTERNAL_SERVER_ERROR} />} />
+            <Route path={PUBLIC_ROUTES.NOT_FOUND} element={<ErrorPage errorCode={HTTP_STATUS.NOT_FOUND} />} />
 
             <Route element={<MainMenuLayout />}>
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path={PUBLIC_ROUTES.PROFILE} element={<ProfilePage />} />
 
-                <Route path="/admin" element={<AdministrationPage />} />
-                <Route path="/admin/users" element={<AdminUsersPage />} />
-                <Route path="/admin/users/:userId" element={<AdminItemUserPage />} />
-                <Route path="/admin/usefulservices" element={<AdminServicesPage />} />
-                <Route path="/admin/events" element={<AdminEventsPage />} />
-                <Route path="/admin/events/creating" element={<AdminAddEventPage />} />
-                <Route path="/admin/events/editing/:id" element={<AdminEditEventPage />} />
-                <Route path="/admin/events/:eventId" element={<AdminItemEventPage/>} />
+                <Route path={ADMIN_ROUTES.ADMIN} element={<AdministrationPage />} />
+                <Route path={ADMIN_ROUTES.ADMIN_USERS} element={<AdminUsersPage />} />
+                <Route path={ADMIN_ROUTES.ADMIN_USER(":userId")}element={<AdminItemUserPage />} />
+                <Route path={ADMIN_ROUTES.ADMIN_USEFUL_SERVICES} element={<AdminServicesPage />} />
+                <Route path={ADMIN_ROUTES.ADMIN_EVENTS} element={<AdminEventsPage />} />
+                <Route path={ADMIN_ROUTES.ADMIN_EVENTS_CREATE} element={<AdminAddEventPage />} />
+                <Route path={ADMIN_ROUTES.ADMIN_EVENTS_EDIT(":eventId")} element={<AdminEditEventPage />} />
+                <Route path={ADMIN_ROUTES.ADMIN_EVENT(":eventId")} element={<AdminItemEventPage/>} />
 
 
-                <Route path="/usefulservices" element={<ServicesPage />} />
-                <Route path="/certificates" element={<CertificatesPage />} />
-                <Route path="/events" element={<EventsPage />} />
-                <Route path="/events/:eventId" element={<EventItemPage/>} />
+                <Route path={PUBLIC_ROUTES.USEFUL_SERVICES} element={<ServicesPage />} />
+                <Route path={PUBLIC_ROUTES.CERTIFICATES} element={<CertificatesPage />} />
+                <Route path={PUBLIC_ROUTES.EVENTS} element={<EventsPage />} />
+                <Route path={PUBLIC_ROUTES.EVENT(":eventId")} element={<EventItemPage/>} />
             </Route>
         </Routes>
     )

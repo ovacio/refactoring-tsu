@@ -19,6 +19,8 @@ import {useRequest} from "../../hooks/useRequest.ts";
 import {formatDate} from "../../components/admin/EventCard.tsx";
 import MapView from "../../components/admin/MapView.tsx";
 import {useNotification} from "../../context/NotificationContext.tsx";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../../constants/event-constants/event.constants.ts";
 
 
 export const AdminItemEventPage = () => {
@@ -65,7 +67,7 @@ export const AdminItemEventPage = () => {
             await request(
                 EventService.deleteEvent(eventId),
             );
-            navigate("admin/events")
+            navigate(ADMIN_ROUTES.ADMIN_EVENTS)
 
         } catch (e) {
             console.error(e);
@@ -73,7 +75,7 @@ export const AdminItemEventPage = () => {
     };
 
     const handleEditEvent = (eventId: string) => {
-        navigate(`/admin/events/editing/${eventId}`);
+        navigate(ADMIN_ROUTES.ADMIN_EVENTS_EDIT(eventId));
     };
 
     const handleEditStatus = async (newStatus: EventStatus) => {
@@ -138,15 +140,15 @@ export const AdminItemEventPage = () => {
             <h1 className={styles.title}>{t("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
                     {t("administration.administration")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/events" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_EVENTS} className={styles.breadcrumb_active}>
                     {t("administration.events")}
                 </Link>
             </div>
@@ -172,7 +174,7 @@ export const AdminItemEventPage = () => {
 
                 <div className={styles.section}>
                     <p>{t("events.desc")}</p>
-                    <div dangerouslySetInnerHTML={{__html: event?.description || ""}}/>
+                    <div dangerouslySetInnerHTML={{__html: event?.description || EMPTY_STRING}}/>
                     <label>
                         <img src={pictureUrl} alt="avatar" className={styles.image_item_event}/>
                     </label>
@@ -208,7 +210,7 @@ export const AdminItemEventPage = () => {
                                         <div className={styles.section_name_text}>{t("events.format")}</div>
                                         <div
                                             className={styles.section_base_text}>{event.format == EventFormat.Online ?
-                                            "Онлайн" : "Офлайн"}</div>
+                                            FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>
                                     </div> : <></>}
                             </div>
 
@@ -255,7 +257,7 @@ export const AdminItemEventPage = () => {
                                     {event?.participants && (
                                         <button
                                             onClick={() => setActiveTab("inside")}
-                                            className={activeTab === "inside" ? styles.active : ""}
+                                            className={activeTab === "inside" ? styles.active : EMPTY_STRING}
                                         >
                                             {t("events.inside_participant")}
                                         </button>
@@ -263,7 +265,7 @@ export const AdminItemEventPage = () => {
                                     {(
                                         <button
                                             onClick={() => setActiveTab("outside")}
-                                            className={activeTab === "outside" ? styles.active : ""}
+                                            className={activeTab === "outside" ? styles.active : EMPTY_STRING}
                                         >
                                             {t("events.outside_participant")}
                                         </button>

@@ -4,6 +4,8 @@ import Users from "../../assets/icons/Users.tsx";
 import Events from "../../assets/icons/Events.tsx";
 import LinkIcon from "../../assets/icons/LinkIcon.tsx";
 import {Link, useNavigate} from "react-router-dom";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR } from "../../constants/event-constants/event.constants.ts";
 
 export const AdministrationPage = () => {
     const { t } = useTranslation('common');
@@ -14,19 +16,19 @@ export const AdministrationPage = () => {
             title: t("administration.users"),
             description: t("administration.users_fish"),
             icon: Users,
-            path: "/admin/users",
+            path: ADMIN_ROUTES.ADMIN_USERS,
         },
         {
             title: t("administration.services"),
             description: t("administration.services_fish"),
             icon: LinkIcon,
-            path: "/admin/usefulservices",
+            path: ADMIN_ROUTES.ADMIN_USEFUL_SERVICES,
         },
         {
             title: t("administration.events"),
             description: t("administration.events_fish"),
             icon: Events,
-            path: "/admin/events",
+            path: ADMIN_ROUTES.ADMIN_EVENTS,
         },
     ];
 
@@ -34,11 +36,11 @@ export const AdministrationPage = () => {
         <div className={styles.admin_page}>
             <h1 className={styles.title}>{t("administration.administration")}</h1>
                 <div className={styles.breadcrumb}>
-                    <Link to="/profile" className={styles.breadcrumb_link}>
+                    <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                         {t("common.main")}
                     </Link>
-                    <span className={styles.breadcrumb_separator}> / </span>
-                    <Link to="/admin" className={styles.breadcrumb_active}>
+                    <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                    <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_active}>
                         {t("administration.administration")}
                     </Link>
                 </div>

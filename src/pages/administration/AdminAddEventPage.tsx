@@ -11,6 +11,8 @@ import ImageUpload from "../../components/admin/ImageUpload.tsx";
 import {DateTimePicker} from "../../components/admin/DateTimePicker.tsx";
 import {useNotification} from "../../context/NotificationContext.tsx";
 import {AddressInput} from "../../components/admin/AddressInput.tsx";
+import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../../constants/event-constants/event.constants.ts";
 
 export const AdminAddEventPage = () => {
     const { t } = useTranslation('common');
@@ -18,10 +20,10 @@ export const AdminAddEventPage = () => {
     const navigate = useNavigate();
     const { notify } = useNotification();
 
-    const [name, setName] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
+    const [name, setName] = useState<string>(EMPTY_STRING);
+    const [description, setDescription] = useState<string>(EMPTY_STRING);
     const [register, setRegister] = useState<boolean>(false);
-    const [address, setAddress] = useState<string>('');
+    const [address, setAddress] = useState<string>(EMPTY_STRING);
 
     const [type, setType] = useState<EventType | undefined>(undefined);
     const [format, setFormat] = useState<EventFormat | undefined>(EventFormat.Online);
@@ -30,10 +32,10 @@ export const AdminAddEventPage = () => {
     const [longitude, setLng] = useState<number>();
     const [latitude, setLatitude] = useState<number>();
 
-    const [link, setLink] = useState<string>('');
-    const [notification, setNotification] = useState<string>('');
+    const [link, setLink] = useState<string>(EMPTY_STRING);
+    const [notification, setNotification] = useState<string>(EMPTY_STRING);
     const [isDigest, setIsDigest] = useState<boolean>(false);
-    const [digest, setDigest] = useState<string>('');
+    const [digest, setDigest] = useState<string>(EMPTY_STRING);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [withStartTime, setWithStartTime] = useState(true);
@@ -54,7 +56,7 @@ export const AdminAddEventPage = () => {
             setLng(undefined);
         }
 
-        if (!selected || selected === '') {
+        if (!selected || selected === EMPTY_STRING) {
             setLatitude(undefined);
             setLng(undefined);
         }
@@ -97,7 +99,7 @@ export const AdminAddEventPage = () => {
             return;
         }
 
-        if (format == EventFormat.Offline && (address == "") && (!latitude) && (!longitude)) {
+        if (format == EventFormat.Offline && (address == EMPTY_STRING) && (!latitude) && (!longitude)) {
             notify("warning", t("events.required_address"))
             return;
         }
@@ -112,7 +114,7 @@ export const AdminAddEventPage = () => {
             return;
         }
 
-        if (longitude && (address == "") || latitude && (address == "")) {
+        if (longitude && (address == EMPTY_STRING) || latitude && (address == EMPTY_STRING)) {
             notify("warning", t("events.required_address"))
             return;
         }
@@ -151,7 +153,7 @@ export const AdminAddEventPage = () => {
             {
                 successMessage: t("events.success"),
                 onSuccess: () => {
-                    navigate("/admin/events");
+                    navigate(ADMIN_ROUTES.ADMIN_EVENTS);
                 }
             }
         );
@@ -162,19 +164,19 @@ export const AdminAddEventPage = () => {
             <h1 className={styles.title}>{t("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
                     {t("administration.administration")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/events" className={styles.breadcrumb_link}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_EVENTS} className={styles.breadcrumb_link}>
                     {t("administration.events")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/admin/events/creating" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={ADMIN_ROUTES.ADMIN_EVENTS_CREATE} className={styles.breadcrumb_active}>
                     {t("events.creating")}
                 </Link>
             </div>
@@ -211,7 +213,7 @@ export const AdminAddEventPage = () => {
                 <div className={styles.row_container}>
                     <div className={styles.input_wrapper}>
                         <label className={styles.label_choose}>{t("events.type")}</label>
-                        <select className={styles.item_input_choose} value={type ?? ''}
+                        <select className={styles.item_input_choose} value={type ?? EMPTY_STRING}
                                 onChange={(e) => setType(e.target.value ? EventType[e.target.value as keyof typeof EventType] : undefined)}>
                             <option value={undefined}></option>
                             <option value={EventType.Open}>Открытое</option>
@@ -221,7 +223,7 @@ export const AdminAddEventPage = () => {
 
                     <div className={styles.input_wrapper}>
                         <label className={styles.label_choose}>{t("events.audience")}</label>
-                        <select className={styles.item_input_choose} value={audience ?? ''}
+                        <select className={styles.item_input_choose} value={audience ?? EMPTY_STRING}
                                 onChange={(e) => setAudience(e.target.value ? EventAuditory[e.target.value as keyof typeof EventAuditory] : undefined)}>
                             <option value={undefined}></option>
                             <option value={EventAuditory.All}>Все</option>
@@ -239,7 +241,7 @@ export const AdminAddEventPage = () => {
                 {register ? <div className={styles.input_wrapper_full}>
                     <label className={styles.label_choose}>{t("events.date_end_register")}</label>
                     <input className={styles.item_input_choose}
-                           value={endDateRegister ? endDateRegister.toISOString().slice(0, 10) : ''} type="date"
+                           value={endDateRegister ? endDateRegister.toISOString().slice(0, 10) : EMPTY_STRING} type="date"
                            onChange={(e) => setEndDateRegister(new Date(e.target.value))}>
 
                     </input>
@@ -247,10 +249,10 @@ export const AdminAddEventPage = () => {
 
                 <div className={styles.input_wrapper_full}>
                     <label className={styles.label_choose}>{t("events.format")}</label>
-                    <select className={styles.item_input_choose} value={format ?? ''}
+                    <select className={styles.item_input_choose} value={format ?? EMPTY_STRING}
                             onChange={(e) => setFormat(e.target.value ? EventFormat[e.target.value as keyof typeof EventFormat] : undefined)}>
-                        <option value={EventFormat.Online}>Онлайн</option>
-                        <option value={EventFormat.Offline}>Офлайн</option>
+                        <option value={EventFormat.Online}>{FORMAT_TEXTS.Online}</option>
+                        <option value={EventFormat.Offline}>{FORMAT_TEXTS.Offline}</option>
                     </select>
                 </div>
 
@@ -304,7 +306,7 @@ export const AdminAddEventPage = () => {
 
                 <div className={styles.buttons_container}>
                     <button className={styles.button_primary} type="submit" onClick={handleSubmit}>{t("common.save")}</button>
-                    <button className={styles.button_outlined} onClick={() => navigate('/admin/events')}>{t("common.cancel")}</button>
+                    <button className={styles.button_outlined} onClick={() => navigate(ADMIN_ROUTES.ADMIN_EVENTS)}>{t("common.cancel")}</button>
                 </div>
 
             </div>

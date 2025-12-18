@@ -9,6 +9,7 @@ import {useRequest} from "../../hooks/useRequest.ts";
 import { useNotification } from "../../context/NotificationContext.tsx";
 import { setAccessToken, setRefreshToken } from "../../auth/cookiesService.ts";
 import {useNavigate} from "react-router-dom";
+import { PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
 
 export const LoginForm = () => {
     const {t} = useTranslation('common');
@@ -32,7 +33,7 @@ export const LoginForm = () => {
                         setAccessToken(data.accessToken);
                         setRefreshToken(data.refreshToken);
                         notify("success", t("notifications.logged_in"));
-                        navigate("/events"); //Тут events, вместо profile, тк events главная стр
+                        navigate(PUBLIC_ROUTES.EVENTS); //Тут events, вместо profile, тк events главная стр
 
                     } else {
                         notify("error", t("notifications.login_failed"));

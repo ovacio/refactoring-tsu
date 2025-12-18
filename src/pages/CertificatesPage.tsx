@@ -5,6 +5,8 @@ import {CertificateTabs} from "../components/certificates/CertificateTabs.tsx";
 import {useProfile} from "../context/ProfileContext.tsx";
 import {EducationEntryDto, EmployeeDto, ProfileService, UserType} from "../services/profile.service.ts";
 import {useEffect, useState} from "react";
+import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR } from "../constants/event-constants/event.constants.ts";
 
 export const CertificatesPage = () => {
     const {t} = useTranslation('common');
@@ -32,11 +34,11 @@ export const CertificatesPage = () => {
             <h1 className={styles.title}>{t("certificates.certificates")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/certificates" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={PUBLIC_ROUTES.CERTIFICATES} className={styles.breadcrumb_active}>
                     {t("certificates.certificates")}
                 </Link>
             </div>

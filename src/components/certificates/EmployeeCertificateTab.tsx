@@ -11,6 +11,7 @@ import {formatDate, formatTime} from "../admin/EventCard.tsx";
 import SignatureSave from "../../assets/icons/SignatureSave.tsx";
 import CertificateSave from "../../assets/icons/CertificateSave.tsx";
 import {downloadFile} from "./CertificateTabs.tsx";
+import { EMPTY_STRING } from "../../constants/event-constants/event.constants.ts";
 
 
 interface EmployeeTabProps {
@@ -50,7 +51,7 @@ export const EmployeeCertificateTab = ({
                     <button
                         key={index}
                         onClick={() => setActiveTabIndex(index)}
-                        className={`${styles.tab} ${activeTabIndex === index ? styles.active : ""}`}
+                        className={`${styles.tab} ${activeTabIndex === index ? styles.active : EMPTY_STRING}`}
                     >
                         <p>{employee.postName.name}</p>
                         <p>{employee.employmentType == EmploymentType.MainPlace ? "Основное место работы" :
@@ -156,7 +157,7 @@ export const EmployeeCertificateTab = ({
                             <div className={styles.certificate_main_part}>
                                 <div className={styles.certificate_title}>
                                     Справка
-                                    от {certificate.dateOfForming ? `${formatDate(certificate.dateOfForming)} ${formatTime(certificate.dateOfForming)}` : ""}
+                                    от {certificate.dateOfForming ? `${formatDate(certificate.dateOfForming)} ${formatTime(certificate.dateOfForming)}` : EMPTY_STRING}
                                 </div>
                                 <div className={styles.section_name_text}>
                                     {t("certificates.type")}: {certificate.staffType == CertificateStaffType.ForExperience ?

@@ -9,6 +9,8 @@ import {Pagination} from "@mui/material";
 import {ServicePublicCard} from "../components/services/ServicePublicCard.tsx";
 import {useProfile} from "../context/ProfileContext.tsx";
 import {UserType} from "../services/profile.service.ts";
+import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
+import { BREADCRUMB_SEPARATOR, PAGE_DEFAULT, PAGE_SIZE } from "../constants/event-constants/event.constants.ts";
 
 export const ServicesPage = () => {
     const { t } = useTranslation('common');
@@ -20,8 +22,8 @@ export const ServicesPage = () => {
     const [metadata, setMetadata] = useState<PagedListMetaData | null>(null);
     const [loading, setLoading] = useState(false);
     const [profileLoading, setProfileLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(PAGE_DEFAULT);
+    const pageSize = PAGE_SIZE;
 
     const filterServices = (services: UsefulServiceDto[]) => {
         if (!profile?.userTypes) {
@@ -107,12 +109,12 @@ export const ServicesPage = () => {
             <h1 className={styles.title}>{t("administration.services")}</h1>
 
             <div className={styles.breadcrumb}>
-                <Link to="/profile" className={styles.breadcrumb_link}>
+                <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
                     {t("common.main")}
                 </Link>
 
-                <span className={styles.breadcrumb_separator}> / </span>
-                <Link to="/usefulservices" className={styles.breadcrumb_active}>
+                <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
+                <Link to={PUBLIC_ROUTES.USEFUL_SERVICES} className={styles.breadcrumb_active}>
                     {t("administration.services")}
                 </Link>
             </div>
@@ -129,7 +131,7 @@ export const ServicesPage = () => {
 
             <div className={styles.pagination_container} style={{paddingTop: '16px'}}>
                 <Pagination
-                    count={metadata?.pageCount || 1}
+                    count={metadata?.pageCount || PAGE_DEFAULT}
                     page={currentPage}
                     onChange={handlePageChange}
                 />
