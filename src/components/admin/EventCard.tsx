@@ -17,7 +17,7 @@ interface EventCardProps {
 }
 
 export const EventCard = (props: EventCardProps) => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const [pictureUrl, setPictureUrl] = useState<string | undefined>();
 
     useEffect(() => {
@@ -25,8 +25,8 @@ export const EventCard = (props: EventCardProps) => {
             if (!props.event || !props.event.id) return;
 
             if (props.event.picture !== null) {
-                const url = await fetchFileById(props.event.picture.id);
-                setPictureUrl(url);
+                const pictureObjectUrl = await fetchFileById(props.event.picture.id);
+                setPictureUrl(pictureObjectUrl);
             }
             else {
                 setPictureUrl(defaultAvatar);
@@ -54,11 +54,11 @@ export const EventCard = (props: EventCardProps) => {
 
                 <div className={styles.section_row}>
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("events.type")}</div>
+                        <div className={styles.section_name_text}>{i18next("events.type")}</div>
                         <div className={styles.section_base_text}>{props.event.type == EventType.Open ? "Открытое" : props.event.type == EventType.Close ? "Закрытое" : "Неизвестно" }</div>
                     </div>
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("events.auditory")}</div>
+                        <div className={styles.section_name_text}>{i18next("events.auditory")}</div>
                         <div
                             className={styles.section_base_text}>{props.event.auditory == EventAuditory.All ?
                             "Общий" : props.event.auditory == EventAuditory.Students ? "Студенты" : "Преподаватели"}</div>
@@ -67,13 +67,13 @@ export const EventCard = (props: EventCardProps) => {
 
                 <div className={styles.section_row}>
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("events.date")}</div>
+                        <div className={styles.section_name_text}>{i18next("events.date")}</div>
                         <div
                             className={styles.section_base_text}>{props.event.dateTimeTo ? formatDate(props.event.dateTimeFrom) +
                             " - " + formatDate(props.event.dateTimeTo) : formatDate(props.event.dateTimeFrom)}</div>
                     </div>
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("events.format")}</div>
+                        <div className={styles.section_name_text}>{i18next("events.format")}</div>
                         <div
                             className={styles.section_base_text}>{props.event.format == EventFormat.Online ?
                             FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>
@@ -82,12 +82,12 @@ export const EventCard = (props: EventCardProps) => {
 
                 <div className={styles.section_row}>
                     {props.event.dateTimeFrom && props.event.isTimeFromNeeded ? <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("events.start_time")}</div>
+                        <div className={styles.section_name_text}>{i18next("events.start_time")}</div>
                         <div
                             className={styles.section_base_text}>{formatTime(props.event.dateTimeFrom)}</div>
                     </div> : <></>}
                     {props.event.dateTimeTo ? <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("events.end_time")}</div>
+                        <div className={styles.section_name_text}>{i18next("events.end_time")}</div>
                         <div className={styles.section_base_text}>{formatTime(props.event.dateTimeTo)}</div>
                     </div> : <></>}
                 </div>

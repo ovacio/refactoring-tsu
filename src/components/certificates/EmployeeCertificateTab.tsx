@@ -41,7 +41,7 @@ export const EmployeeCertificateTab = ({
                                            setCertificateView,
                                            isLoading,
                                        }: EmployeeTabProps) => {
-    const { t } = useTranslation("common");
+    const { t: i18next } = useTranslation("common");
     const employeePosts = employee?.posts || [];
 
     return (
@@ -66,7 +66,7 @@ export const EmployeeCertificateTab = ({
                 <div className={styles.content}>
                     <div className={styles.section_row}>
                         <div className={styles.section_item_block}>
-                            <h2 className={styles.section_name_text}>{t("employee.job_title")}</h2>
+                            <h2 className={styles.section_name_text}>{i18next("employee.job_title")}</h2>
                             <span
                                 className={styles.section_base_text}>{employeePosts[activeTabIndex].employmentType == EmploymentType.MainPlace ? "Основное место работы" :
                                 employeePosts[activeTabIndex].employmentType == EmploymentType.Freelance ? "Фриланс" :
@@ -75,27 +75,27 @@ export const EmployeeCertificateTab = ({
                         </div>
 
                         <div className={styles.section_item_block}>
-                            <h2 className={styles.section_name_text}>{t("employee.rate")}</h2>
+                            <h2 className={styles.section_name_text}>{i18next("employee.rate")}</h2>
                             <span
                                 className={styles.section_base_text}>{employeePosts[activeTabIndex].rate}</span>
                         </div>
                     </div>
 
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t('employee.place')}</div>
+                        <div className={styles.section_name_text}>{i18next('employee.place')}</div>
                         <div className={styles.section_base_text}>{employeePosts[activeTabIndex].departments.map((department) => (
                             <div>{department.name}</div>))}</div>
                     </div>
 
                     <div className={styles.section_row}>
                         <div className={styles.section_item_block}>
-                            <div className={styles.section_name_text}>{t('employee.type')}</div>
+                            <div className={styles.section_name_text}>{i18next('employee.type')}</div>
                             <div
                                 className={styles.section_base_text}>{employeePosts[activeTabIndex].postType.name}</div>
                         </div>
 
                         <div className={styles.section_item_block}>
-                            <div className={styles.section_name_text}>{t('employee.view')}</div>
+                            <div className={styles.section_name_text}>{i18next('employee.view')}</div>
                             <div className={styles.section_base_text}>
                                 {employeePosts[activeTabIndex].employmentType == EmploymentType.MainPlace ? "Основное место работы" :
                                     employeePosts[activeTabIndex].employmentType == EmploymentType.Freelance ? "Фриланс" :
@@ -110,11 +110,11 @@ export const EmployeeCertificateTab = ({
             )}
 
             <div>
-                <p className={styles.order_text}>{t("certificates.order_certificate")}</p>
+                <p className={styles.order_text}>{i18next("certificates.order_certificate")}</p>
                 <div className={styles.order_row}>
 
                     <div className={styles.input_wrapper}>
-                        <label className={styles.label_choose}>{t("certificates.type")}</label>
+                        <label className={styles.label_choose}>{i18next("certificates.type")}</label>
                         <select className={styles.item_input_choose} value={certificateType}
                                 onChange={(e) => setCertificateType(e.target.value as CertificateStaffType)}>
                             <option value={undefined}></option>
@@ -126,7 +126,7 @@ export const EmployeeCertificateTab = ({
                     </div>
 
                     <div className={styles.input_wrapper}>
-                        <label className={styles.label_choose}>{t("certificates.view")}</label>
+                        <label className={styles.label_choose}>{i18next("certificates.view")}</label>
                         <select className={styles.item_input_choose} value={certificateView}
                                 onChange={(e) => setCertificateView(e.target.value as CertificateReceiveType)}>
                             <option value={undefined}></option>
@@ -140,15 +140,15 @@ export const EmployeeCertificateTab = ({
                         className={styles.order_button}
                         onClick={handleOrderCertificate}
                     >
-                        {t("certificates.order")}
+                        {i18next("certificates.order")}
                     </button>
 
                 </div>
-                {isLoading ? t("common.loading") : ''}
+                {isLoading ? i18next("common.loading") : ''}
             </div>
 
             {certificatesLoading ? (
-                <p style={{padding: '16px'}}>{t("common.loading")}</p>
+                <p style={{padding: '16px'}}>{i18next("common.loading")}</p>
             ) : (
                 <div className={styles.certificates_container}>
 
@@ -160,13 +160,13 @@ export const EmployeeCertificateTab = ({
                                     от {certificate.dateOfForming ? `${formatDate(certificate.dateOfForming)} ${formatTime(certificate.dateOfForming)}` : EMPTY_STRING}
                                 </div>
                                 <div className={styles.section_name_text}>
-                                    {t("certificates.type")}: {certificate.staffType == CertificateStaffType.ForExperience ?
+                                    {i18next("certificates.type")}: {certificate.staffType == CertificateStaffType.ForExperience ?
                                     "Для опыта" : certificate.staffType == CertificateStaffType.ForVisa ? "Для визы" :
                                         certificate.staffType == CertificateStaffType.ForWorkBookCopy ? "Для копии трудовой книжки" :
                                 "Для места работы"}
                                 </div>
                                 <div className={styles.section_name_text}>
-                                    {t("certificates.view")}: {certificate.receiveTypeEnumDto?.displayName || certificate.receiveType}
+                                    {i18next("certificates.view")}: {certificate.receiveTypeEnumDto?.displayName || certificate.receiveType}
                                 </div>
                             </div>
 
@@ -176,12 +176,12 @@ export const EmployeeCertificateTab = ({
                                         <button
                                             className={styles.save_signature_button}
                                             onClick={() => downloadFile(certificate.signatureFile)}>
-                                            <SignatureSave/> {t("certificates.signature")}
+                                            <SignatureSave/> {i18next("certificates.signature")}
                                         </button>
                                         <button
                                             className={styles.save_certificate_button}
                                             onClick={() => downloadFile(certificate.certificateFile)}>
-                                            <CertificateSave/> {t("certificates.save_certificate")}
+                                            <CertificateSave/> {i18next("certificates.save_certificate")}
                                         </button>
                                     </> : <></>
                                 }

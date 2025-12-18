@@ -8,25 +8,25 @@ import { ADMIN_ROUTES, PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
 import { BREADCRUMB_SEPARATOR } from "../../constants/event-constants/event.constants.ts";
 
 export const AdministrationPage = () => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const navigate = useNavigate();
 
     const cards = [
         {
-            title: t("administration.users"),
-            description: t("administration.users_fish"),
+            title: i18next("administration.users"),
+            description: i18next("administration.users_fish"),
             icon: Users,
             path: ADMIN_ROUTES.ADMIN_USERS,
         },
         {
-            title: t("administration.services"),
-            description: t("administration.services_fish"),
+            title: i18next("administration.services"),
+            description: i18next("administration.services_fish"),
             icon: LinkIcon,
             path: ADMIN_ROUTES.ADMIN_USEFUL_SERVICES,
         },
         {
-            title: t("administration.events"),
-            description: t("administration.events_fish"),
+            title: i18next("administration.events"),
+            description: i18next("administration.events_fish"),
             icon: Events,
             path: ADMIN_ROUTES.ADMIN_EVENTS,
         },
@@ -34,14 +34,14 @@ export const AdministrationPage = () => {
 
     return (
         <div className={styles.admin_page}>
-            <h1 className={styles.title}>{t("administration.administration")}</h1>
+            <h1 className={styles.title}>{i18next("administration.administration")}</h1>
                 <div className={styles.breadcrumb}>
                     <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
-                        {t("common.main")}
+                        {i18next("common.main")}
                     </Link>
                     <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                     <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_active}>
-                        {t("administration.administration")}
+                        {i18next("administration.administration")}
                     </Link>
                 </div>
 

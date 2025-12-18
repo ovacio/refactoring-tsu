@@ -12,7 +12,7 @@ import {useNavigate} from "react-router-dom";
 import { PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
 
 export const LoginForm = () => {
-    const {t} = useTranslation('common');
+    const {t: i18next} = useTranslation('common');
     const navigate = useNavigate();
 
     const [email, setEmail] = useState<string>('');
@@ -27,16 +27,16 @@ export const LoginForm = () => {
         await request(
             AuthService.login({ email, password, rememberMe }).then(res => res.data),
             {
-                errorMessage: t("notifications.login_failed"),
+                errorMessage: i18next("notifications.login_failed"),
                 onSuccess: (data) => {
                     if (data.loginSucceeded) {
                         setAccessToken(data.accessToken);
                         setRefreshToken(data.refreshToken);
-                        notify("success", t("notifications.logged_in"));
+                        notify("success", i18next("notifications.logged_in"));
                         navigate(PUBLIC_ROUTES.EVENTS); //Тут events, вместо profile, тк events главная стр
 
                     } else {
-                        notify("error", t("notifications.login_failed"));
+                        notify("error", i18next("notifications.login_failed"));
                     }
                 }
             }
@@ -45,25 +45,25 @@ export const LoginForm = () => {
 
     return (
         <form className={styles.registration_form} onSubmit={handleLogin}>
-            <h1 className={styles.title}>{t('titles.login')}</h1>
+            <h1 className={styles.title}>{i18next('titles.login')}</h1>
             <ItemInput
-                label={t('labels.username')}
+                label={i18next('labels.username')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 />
 
             <ItemInput
-                label={t('labels.password')}
+                label={i18next('labels.password')}
                 value={password}
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 />
-            <ItemSwitch label={t('labels.remember_me')}
+            <ItemSwitch label={i18next('labels.remember_me')}
                         checked={rememberMe}
                         onChange={(checked) => setRememberMe(checked)}
             />
             <ItemButton variant="primary">
-                {t('buttons.submit')}
+                {i18next('buttons.submit')}
             </ItemButton>
         </form>
     );

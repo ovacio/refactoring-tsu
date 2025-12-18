@@ -14,7 +14,7 @@ import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
 import { BREADCRUMB_SEPARATOR, EMPTY_STRING, PAGE_DEFAULT, PAGE_SIZE } from "../constants/event-constants/event.constants.ts";
 
 export const EventsPage = () => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { request } = useRequest();
     const { profile } = useProfile();
 
@@ -28,8 +28,8 @@ export const EventsPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const getParam = (key: string) => searchParams.get(key) || EMPTY_STRING;
 
-    const [name, setName] = useState<string>(() => getParam("name"));
-    const [date, setDate] = useState<string>(() => getParam("date"));
+    const [eventName, setEventName] = useState<string>(() => getParam("name"));
+    const [eventDate, setEventDate] = useState<string>(() => getParam("date"));
     const [currentPage, setCurrentPage] = useState<number>(() =>
         parseInt(searchParams.get("page") || String(PAGE_DEFAULT))
     );
@@ -71,14 +71,14 @@ export const EventsPage = () => {
                 try {
                     const response = await request(
                         EventService.getEventsPublicWithAuth(
-                            name,
-                            date,
+                            eventName,
+                            eventDate,
                             420,
                             currentPage,
                             pageSize
                         ),
                         {
-                            errorMessage: t("common.not_logged_in")
+                            errorMessage: i18next("common.not_logged_in")
                         }
                     );
                     setIsAuth(true);
@@ -89,8 +89,8 @@ export const EventsPage = () => {
                         setIsAuth(false);
                         return await request(
                             EventService.getEventsPublic(
-                                name,
-                                date,
+                                eventName,
+                                eventDate,
                                 420,
                                 currentPage,
                                 pageSize
@@ -121,7 +121,7 @@ export const EventsPage = () => {
     useEffect(() => {
         updateSearchParams();
         fetchEvents();
-    }, [name, date, currentPage]);
+    }, [eventName, eventDate, currentPage]);
 
     useEffect(() => {
         if (profile !== undefined) {
@@ -131,8 +131,8 @@ export const EventsPage = () => {
 
     const updateSearchParams = () => {
         const params: any = {
-            name,
-            date,
+            eventName,
+            eventDate,
             page: currentPage,
         };
 
@@ -148,56 +148,56 @@ export const EventsPage = () => {
     };
 
     if (profileLoading) {
-        return <p>{t("common.loading")}</p>;
+        return <p>{i18next("common.loading")}</p>;
     }
 
     return (
         <div className={styles.admin_events_page}>
-            <h1 className={styles.title}>{t("events.events")}</h1>
+            <h1 className={styles.title}>{i18next("events.events")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.EVENTS} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={PUBLIC_ROUTES.EVENTS} className={styles.breadcrumb_active}>
-                    {t("administration.events")}
+                    {i18next("administration.events")}
                 </Link>
             </div>
 
             <div className={styles.section}>
-                <p className={styles.base_text}>{t("events.search")}</p>
+                <p className={styles.base_text}>{i18next("events.search")}</p>
 
                 <div className={styles.row_container}>
-                    <ItemInput label={t("events.name")} value={name}
-                               onChange={(e) => setName(e.target.value)}></ItemInput>
+                    <ItemInput label={i18next("events.name")} value={eventName}
+                               onChange={(e) => setEventName(e.target.value)}></ItemInput>
                     <button
                         type="button"
                         className={styles.search_button}
                         onClick={fetchEvents}
                     >
-                        {t("administration.search")}
+                        {i18next("administration.search")}
                     </button>
                 </div>
 
                 <div className={styles.input_wrapper}>
-                    <label className={styles.label_choose}>{t("events.search_date")}</label>
-                    <input className={styles.item_input_choose} value={date} type="date"
-                           onChange={(e) => setDate(e.target.value)}>
+                    <label className={styles.label_choose}>{i18next("events.search_date")}</label>
+                    <input className={styles.item_input_choose} value={eventDate} type="date"
+                           onChange={(e) => setEventDate(e.target.value)}>
                     </input>
                 </div>
             </div>
 
             <div className={styles.events_grid}>
                 {loading ? (
-                    <p>{t("common.loading")}</p>
+                    <p>{i18next("common.loading")}</p>
                 ) : filteredEvents.length === 0 ? (
-                    <p style={{padding: 16}}>{t("administration.no_events")}</p>
+                    <p style={{padding: 16}}>{i18next("administration.no_events")}</p>
                 ) : filteredEvents.map((event) => (
                     <EventPublicCard
                         key={event.id}
                         event={event}
-                        isFilter={date.length > 0 || name.length > 0}
+                        isFilter={eventDate.length > 0 || eventName.length > 0}
                     />
                 ))}
             </div>

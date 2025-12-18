@@ -16,7 +16,7 @@ import { BREADCRUMB_SEPARATOR, EMPTY_STRING, FORMAT_TEXTS } from "../../constant
 import { ADMIN_USERS_CONSTANTS } from "../../constants/admin-users-constants/admin-users-constants.ts";
 
 export const AdminEventsPage = () => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { request } = useRequest();
     const navigate = useNavigate();
 
@@ -32,11 +32,11 @@ export const AdminEventsPage = () => {
 
     const getParam = (key: string) => searchParams.get(key) || EMPTY_STRING;
 
-    const [name, setName] = useState<string>(() => getParam("name"));
-    const [status, setStatus] = useState<string>(() => getParam("status"));
-    const [type, setType] = useState<string>(() => getParam("type"));
-    const [format, setFormat] = useState<string>(() => getParam("format"));
-    const [date, setDate] = useState<string>(() => getParam("date"));
+    const [eventName, setEventName] = useState<string>(() => getParam("name"));
+    const [eventStatus, setEventStatus] = useState<string>(() => getParam("status"));
+    const [eventType, setEventType] = useState<string>(() => getParam("type"));
+    const [eventFormat, setEventFormat] = useState<string>(() => getParam("format"));
+    const [eventDate, setEventDate] = useState<string>(() => getParam("date"));
     const [currentPage, setCurrentPage] = useState<number>(() =>
         parseInt(searchParams.get("page") || String(ADMIN_USERS_CONSTANTS.DEFAULT_PAGE))
     );
@@ -46,17 +46,17 @@ export const AdminEventsPage = () => {
         try {
             const response = await request(
                 EventService.getEvents(
-                    status,
-                    type,
-                    name,
-                    format,
-                    date,
+                    eventStatus,
+                    eventType,
+                    eventName,
+                    eventFormat,
+                    eventDate,
                     420,
                     currentPage,
                     pageSize
                 ),
                 {
-                    errorMessage: t("common.access_denied"),
+                    errorMessage: i18next("common.access_denied"),
                 }
             );
 
@@ -73,15 +73,11 @@ export const AdminEventsPage = () => {
     useEffect(() => {
         updateSearchParams();
         fetchEvents();
-    }, [name, status, type, format, date, currentPage]);
+    }, [eventName, eventStatus, eventType, eventFormat, eventDate, currentPage]);
 
     const updateSearchParams = () => {
         const params: any = {
-            name,
-            status,
-            type,
-            format,
-            date,
+            eventName, eventStatus, eventType, eventFormat, eventDate,
             page: currentPage,
         };
 
@@ -101,8 +97,8 @@ export const AdminEventsPage = () => {
             await request(
                EventService.deleteEvent(eventId),
                 {
-                    successMessage: t("events.event_delete_success"),
-                    errorMessage: t("events.event_delete_error")
+                    successMessage: i18next("events.event_delete_success"),
+                    errorMessage: i18next("events.event_delete_error")
                 }
             );
             setEvents(prev => prev.filter(event => event.id !== eventId));
@@ -120,60 +116,60 @@ export const AdminEventsPage = () => {
 
     return (
         <div className={styles.admin_events_page}>
-            <h1 className={styles.title}>{t("administration.administration")}</h1>
+            <h1 className={styles.title}>{i18next("administration.administration")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN} className={styles.breadcrumb_link}>
-                    {t("administration.administration")}
+                    {i18next("administration.administration")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={ADMIN_ROUTES.ADMIN_EVENTS} className={styles.breadcrumb_active}>
-                    {t("administration.events")}
+                    {i18next("administration.events")}
                 </Link>
             </div>
 
             <h2 className={`${styles.title_name}`}>
-                {t("administration.events")}
+                {i18next("administration.events")}
             </h2>
 
             <button
                 className={styles.add_event_button}
                 onClick={() => navigate(ADMIN_ROUTES.ADMIN_EVENTS_CREATE)}
             >
-                {t("events.add")} <AddService/>
+                {i18next("events.add")} <AddService/>
             </button>
 
 
             <div className={styles.section}>
                 <div className={styles.row_container}>
-                    <p className={styles.base_text}>{t("events.search_bar")}</p>
+                    <p className={styles.base_text}>{i18next("events.search_bar")}</p>
                     <button className={styles.filter_button} onClick={() => {
                         setIsOpen(!isOpen)
-                    }}>{t("events.filters")}<SvgFilter/></button>
+                    }}>{i18next("events.filters")}<SvgFilter/></button>
 
                 </div>
                 <div className={styles.row_container}>
-                    <ItemInput label={t("events.name")} value={name}
-                               onChange={(e) => setName(e.target.value)}></ItemInput>
+                    <ItemInput label={i18next("events.name")} value={eventName}
+                               onChange={(e) => setEventName(e.target.value)}></ItemInput>
                     <button
                         type="button"
                         className={styles.search_button}
                         onClick={fetchEvents}
                     >
-                        {t("administration.search")}
+                        {i18next("administration.search")}
                     </button>
                 </div>
 
                 {isOpen ? <div className={styles.hidden_section}>
                     <div className={styles.row_container}>
                         <div className={styles.input_wrapper}>
-                            <label className={styles.label_choose}>{t("events.status")}</label>
+                            <label className={styles.label_choose}>{i18next("events.status")}</label>
                             <select className={styles.item_input_choose} value={status}
-                                    onChange={(e) => setStatus(e.target.value)}>
+                                    onChange={(e) => setEventStatus(e.target.value)}>
                                 <option value={undefined}></option>
                                 <option value={EventStatus.Actual}>Активное</option>
                                 <option value={EventStatus.Finished}>Завершилось</option>
@@ -183,9 +179,9 @@ export const AdminEventsPage = () => {
                         </div>
 
                         <div className={styles.input_wrapper}>
-                            <label className={styles.label_choose}>{t("events.type")}</label>
-                            <select className={styles.item_input_choose} value={type}
-                                    onChange={(e) => setType(e.target.value)}>
+                            <label className={styles.label_choose}>{i18next("events.type")}</label>
+                            <select className={styles.item_input_choose} value={eventType}
+                                    onChange={(e) => setEventType(e.target.value)}>
                                 <option value={undefined}></option>
                                 <option value={EventType.Open}>Открытое</option>
                                 <option value={EventType.Close}>Закрытое</option>
@@ -195,9 +191,9 @@ export const AdminEventsPage = () => {
 
                     <div className={styles.row_container}>
                         <div className={styles.input_wrapper}>
-                            <label className={styles.label_choose}>{t("events.format")}</label>
-                            <select className={styles.item_input_choose} value={format}
-                                    onChange={(e) => setFormat(e.target.value)}>
+                            <label className={styles.label_choose}>{i18next("events.format")}</label>
+                            <select className={styles.item_input_choose} value={eventFormat}
+                                    onChange={(e) => setEventFormat(e.target.value)}>
                                 <option value={undefined}></option>
                                 <option value={EventFormat.Online}>{FORMAT_TEXTS.Online}</option>
                                 <option value={EventFormat.Offline}>{FORMAT_TEXTS.Offline}</option>
@@ -205,9 +201,9 @@ export const AdminEventsPage = () => {
                         </div>
 
                         <div className={styles.input_wrapper}>
-                            <label className={styles.label_choose}>{t("events.search_date")}</label>
-                            <input className={styles.item_input_choose} value={date} type="date"
-                                    onChange={(e) => setDate(e.target.value)}>
+                            <label className={styles.label_choose}>{i18next("events.search_date")}</label>
+                            <input className={styles.item_input_choose} value={eventDate} type="date"
+                                    onChange={(e) => setEventDate(e.target.value)}>
 
                             </input>
                         </div>
@@ -221,9 +217,9 @@ export const AdminEventsPage = () => {
 
             <div className={styles.events_container}>
                 {loading ? (
-                    <p>{t("common.loading")}</p>
+                    <p>{i18next("common.loading")}</p>
                 ) : events.length === 0 ? (
-                    <p style={{padding: 16}}>{t("administration.no_events")}</p>
+                    <p style={{padding: 16}}>{i18next("administration.no_events")}</p>
                 ) : events.map((event) => (
                     <EventCard event={event} onDelete={handleDeleteEvent} onEdit={handleEditEvent}></EventCard>
                 ))}

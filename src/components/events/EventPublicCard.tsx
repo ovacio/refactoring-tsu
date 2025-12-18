@@ -2,7 +2,7 @@ import styles from "../admin/styles/EventCard.module.css"
 import {fetchFileById} from "../../pages/administration/AdminItemUserPage.tsx";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import defaultAvatar from "../../assets/jpg/default_avatar.jpg";
+import defaultAvatar from "../assets/jpg/default_avatar.jpg";
 import {EventFormat, EventShortDto, EventStatus} from "../../services/event.service.ts";
 import {Link} from "react-router-dom";
 import { PUBLIC_ROUTES } from "../../constants/routes/routes.ts";
@@ -14,19 +14,19 @@ interface EventPublicCardProps {
 }
 
 export const EventPublicCard = (props: EventPublicCardProps) => {
-    const { t } = useTranslation('common');
-    const [pictureUrl, setPictureUrl] = useState<string | undefined>();
+    const { t: i18next } = useTranslation('common');
+    const [eventImageUrl, setEventImageUrl] = useState<string | undefined>();
 
     useEffect(() => {
         const fetchImage = async () => {
             if (!props.event || !props.event.id) return;
 
             if (props.event.picture !== null) {
-                const url = await fetchFileById(props.event.picture.id);
-                setPictureUrl(url);
+                const pictureObjectUrl = await fetchFileById(props.event.picture.id);
+                setEventImageUrl(pictureObjectUrl);
             }
             else {
-                setPictureUrl(defaultAvatar);
+                setEventImageUrl(defaultAvatar);
             }
 
         };
@@ -38,7 +38,7 @@ export const EventPublicCard = (props: EventPublicCardProps) => {
     return(
         <div className={styles.item_event}>
             <div className={styles.public_picture_wrapper}>
-                <img src={pictureUrl} alt="picture" className={styles.picture}/>
+                <img src={eventImageUrl} alt="picture" className={styles.picture}/>
             </div>
 
             <div className={styles.section_container}>
@@ -53,13 +53,13 @@ export const EventPublicCard = (props: EventPublicCardProps) => {
                 : <></>}
 
                 <div className={styles.section_item_block}>
-                    <div className={styles.section_name_text}>{t("events.date")}</div>
+                    <div className={styles.section_name_text}>{i18next("events.date")}</div>
                     <div
                         className={styles.section_base_text}>{props.event.dateTimeTo ? formatDate(props.event.dateTimeFrom) +
                         " - " + formatDate(props.event.dateTimeTo) : formatDate(props.event.dateTimeFrom)}</div>
                 </div>
                 <div className={styles.section_item_block}>
-                    <div className={styles.section_name_text}>{t("events.format")}</div>
+                    <div className={styles.section_name_text}>{i18next("events.format")}</div>
                     <div
                         className={styles.section_base_text}>{props.event.format == EventFormat.Online ?
                         FORMAT_TEXTS.Online : FORMAT_TEXTS.Offline}</div>

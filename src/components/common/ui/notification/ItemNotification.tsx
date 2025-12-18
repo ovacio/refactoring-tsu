@@ -44,7 +44,7 @@ const typeConfig = {
 
 
 export const ItemNotification = ({ type, text, onClose }: NotificationProps) => {
-    const { t } = useTranslation("common");
+    const { t: i18next } = useTranslation("common");
     const { icon, labelKey, color, style } = typeConfig[type];
 
     return (
@@ -53,7 +53,7 @@ export const ItemNotification = ({ type, text, onClose }: NotificationProps) => 
             <div className={styles.notification_header}>
                 <div className={styles.flex_container}>
                     {icon}
-                    <p className={styles[style]}>{t(labelKey)}</p>
+                    <p className={styles[style]}>{i18next(labelKey)}</p>
                 </div>
                 <Close onClick={onClose} strokeColor={color} className={styles.close_button} />
             </div>

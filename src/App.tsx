@@ -14,8 +14,8 @@ import {AdminUsersPage} from "./pages/administration/AdminUsersPage.tsx";
 import {AdminItemUserPage} from "./pages/administration/AdminItemUserPage.tsx";
 import {AdminAddEventPage} from "./pages/administration/AdminAddEventPage.tsx";
 import {AdminEditEventPage} from "./pages/administration/AdminEditEventPage.tsx";
-import {AdminItemEventPage} from "./pages/administration/AdminItemEventPage.tsx";
-import {EventItemPage} from "./pages/EventItemPage.tsx";
+import { AdminDetailsEventPage } from "./pages/administration/AdminDetailsEventPage.tsx";
+import { EventDetailsPage } from "./pages/EventDetailsPage.tsx";
 import { ADMIN_ROUTES, PUBLIC_ROUTES } from "./constants/routes/routes.ts";
 import { HTTP_STATUS } from "./constants/http-status/http-status.ts";
 
@@ -37,13 +37,13 @@ function App() {
                 <Route path={ADMIN_ROUTES.ADMIN_EVENTS} element={<AdminEventsPage />} />
                 <Route path={ADMIN_ROUTES.ADMIN_EVENTS_CREATE} element={<AdminAddEventPage />} />
                 <Route path={ADMIN_ROUTES.ADMIN_EVENTS_EDIT(":eventId")} element={<AdminEditEventPage />} />
-                <Route path={ADMIN_ROUTES.ADMIN_EVENT(":eventId")} element={<AdminItemEventPage/>} />
+                <Route path={ADMIN_ROUTES.ADMIN_EVENT(":eventId")} element={<AdminDetailsEventPage />} />
 
 
                 <Route path={PUBLIC_ROUTES.USEFUL_SERVICES} element={<ServicesPage />} />
                 <Route path={PUBLIC_ROUTES.CERTIFICATES} element={<CertificatesPage />} />
                 <Route path={PUBLIC_ROUTES.EVENTS} element={<EventsPage />} />
-                <Route path={PUBLIC_ROUTES.EVENT(":eventId")} element={<EventItemPage/>} />
+                <Route path={PUBLIC_ROUTES.EVENT(":eventId")} element={<EventDetailsPage />} />
             </Route>
         </Routes>
     )

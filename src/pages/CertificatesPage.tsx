@@ -9,7 +9,7 @@ import { PUBLIC_ROUTES } from "../constants/routes/routes.ts";
 import { BREADCRUMB_SEPARATOR } from "../constants/event-constants/event.constants.ts";
 
 export const CertificatesPage = () => {
-    const {t} = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const { profile } = useProfile();
 
     const [entries, setEntries] = useState<EducationEntryDto[]>([]);
@@ -31,20 +31,20 @@ export const CertificatesPage = () => {
 
     return(
         <div className={styles.certificate_page}>
-            <h1 className={styles.title}>{t("certificates.certificates")}</h1>
+            <h1 className={styles.title}>{i18next("certificates.certificates")}</h1>
 
             <div className={styles.breadcrumb}>
                 <Link to={PUBLIC_ROUTES.PROFILE} className={styles.breadcrumb_link}>
-                    {t("common.main")}
+                    {i18next("common.main")}
                 </Link>
                 <span className={styles.breadcrumb_separator}>{BREADCRUMB_SEPARATOR}</span>
                 <Link to={PUBLIC_ROUTES.CERTIFICATES} className={styles.breadcrumb_active}>
-                    {t("certificates.certificates")}
+                    {i18next("certificates.certificates")}
                 </Link>
             </div>
 
             <h2 className={`${styles.title_name}`}>
-                {t("certificates.order_certificate")}
+                {i18next("certificates.order_certificate")}
             </h2>
 
             { profile && profile.userTypes ?

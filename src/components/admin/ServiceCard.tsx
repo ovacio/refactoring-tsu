@@ -16,7 +16,7 @@ interface ServiceCardProps {
 }
 
 export const ServiceCard = (props: ServiceCardProps) => {
-    const { t } = useTranslation('common');
+    const { t: i18next } = useTranslation('common');
     const [pictureUrl, setPictureUrl] = useState<string | undefined>();
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -25,8 +25,8 @@ export const ServiceCard = (props: ServiceCardProps) => {
             if (!props.service || !props.service.id) return;
 
             if (props.service.logo !== null) {
-                const url = await fetchFileById(props.service.logo.id);
-                setPictureUrl(url);
+                const pictureObjectUrl = await fetchFileById(props.service.logo.id);
+                setPictureUrl(pictureObjectUrl);
             }
             else {
                 setPictureUrl(defaultAvatar);
@@ -48,11 +48,11 @@ export const ServiceCard = (props: ServiceCardProps) => {
                 <p className={styles.title_service}>{props.service.title}</p>
                 <div className={styles.section_row}>
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("services.link")}</div>
+                        <div className={styles.section_name_text}>{i18next("services.link")}</div>
                         <div className={styles.section_base_text}>{props.service.link}</div>
                     </div>
                     <div className={styles.section_item_block}>
-                        <div className={styles.section_name_text}>{t("services.type")}</div>
+                        <div className={styles.section_name_text}>{i18next("services.type")}</div>
                         <div
                             className={styles.section_base_text}>{props.service.category == UsefulServiceCategory.ForAll ?
                             "Общий" : props.service.category == UsefulServiceCategory.Students ? "Студент" : "Сотрудник"}</div>
@@ -61,11 +61,11 @@ export const ServiceCard = (props: ServiceCardProps) => {
                 {isOpen ?
                     <div className={styles.sections_hidden}>
                         <div className={styles.section_item_block}>
-                            <div className={styles.section_name_text}>{t("services.description")}</div>
+                            <div className={styles.section_name_text}>{i18next("services.description")}</div>
                             <div className={styles.section_base_text}>{props.service.description}</div>
                         </div>
                         <div className={styles.section_item_block}>
-                            <div className={styles.section_name_text}>{t("services.condition")}</div>
+                            <div className={styles.section_name_text}>{i18next("services.condition")}</div>
                             <div className={styles.section_base_text}>{props.service.termsOfDisctribution}</div>
                         </div>
                         <CloseService style={{alignSelf: "center"}} onClick={() => setIsOpen(!isOpen)}></CloseService>

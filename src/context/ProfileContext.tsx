@@ -35,11 +35,11 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
                     return;
                 }
 
-                const url = await fetchFileById(data.avatar.id)
-                setAvatarUrl(url || defaultAvatar);
+                const pictureObjectUrl = await fetchFileById(data.avatar.id)
+                setAvatarUrl(pictureObjectUrl || defaultAvatar);
 
                 return () => {
-                    if (url) URL.revokeObjectURL(url);
+                    if (pictureObjectUrl) URL.revokeObjectURL(pictureObjectUrl);
                 };
             } catch (error) {
                 console.error("Ошибка загрузки профиля:", error);
